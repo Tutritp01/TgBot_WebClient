@@ -20,6 +20,7 @@
 
 	<modules>
 		<module>web-ui</module>
+		<module>web-core</module>
 	</modules>
 
 	<dependencies>
