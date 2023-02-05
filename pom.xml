@@ -24,6 +24,7 @@
 		<module>http-client</module>
 		<module>okhttp3-client</module>
 		<module>apache-http-client</module>
+		<module>rest-template-client</module>
 	</modules>
 
 	<dependencies>
