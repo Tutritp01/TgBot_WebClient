@@ -26,6 +26,7 @@
 		<module>apache-http-client</module>
 		<module>rest-template-client</module>
 		<module>feign-client</module>
+		<module>web-flux-client</module>
 	</modules>
 
 	<dependencies>
