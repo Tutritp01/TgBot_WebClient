@@ -23,6 +23,7 @@
 		<module>web-core</module>
 		<module>http-client</module>
 		<module>okhttp3-client</module>
+		<module>apache-http-client</module>
 	</modules>
 
 	<dependencies>
