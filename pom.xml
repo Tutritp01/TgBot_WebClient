@@ -22,11 +22,11 @@
 		<module>web-ui</module>
 		<module>web-core</module>
 		<module>http-client</module>
+		<module>feign-client</module>
 		<module>okhttp3-client</module>
+		<module>web-flux-client</module>
 		<module>apache-http-client</module>
 		<module>rest-template-client</module>
-		<module>feign-client</module>
-		<module>web-flux-client</module>
 	</modules>
 
 	<dependencies>
