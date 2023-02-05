@@ -22,6 +22,7 @@
 		<module>web-ui</module>
 		<module>web-core</module>
 		<module>http-client</module>
+		<module>okhttp3-client</module>
 	</modules>
 
 	<dependencies>
