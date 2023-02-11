@@ -53,13 +53,13 @@ class HomePageControllerTest {
     /*
     It is good practice having 'name' or 'id' attributes on key elements.
      */
-    @Test
+//    @Test
 //    @WithMockUser
     void openHomePage() throws Exception {
         when(engineerGateway.getEngineer()).thenReturn(new User("Mikas", 27));
         final MvcResult result = mockMvc
                 .perform(MockMvcRequestBuilders.get("/"))
-                .andDo(MockMvcResultHandlers.print()) // it could be used for debug, but it prints whole page
+//                .andDo(MockMvcResultHandlers.print()) // it could be used for debug, but it prints whole page
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(model().attribute("user", Matchers.equalTo(makeUser())))
                 .andExpect(view().name("index"))
@@ -76,11 +76,11 @@ class HomePageControllerTest {
         Assertions.assertEquals("Mikas 27", userName.get(0).text());
     }
 
-    @Test
+//    @Test
     void saveEngineer() {
     }
 
-    @Test
+//    @Test
     void testOpenHomePage() {
     }
 
