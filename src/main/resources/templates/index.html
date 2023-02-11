@@ -251,7 +251,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="col-sm-6">
 
                         <!--/*@thymesVar id="user" type="com.tutrit.webclient.bean.User"*/-->
-                        <h1 class="m-0" th:text="${user.userName + ' ' + user.age}">Starter Page</h1>
+                        <h1 id='user-data' class='m-0' th:text="${user.userName + ' ' + user.age}">Starter Page</h1>
 
                         <form method="post">
                             <input name="name"/> <br/>
