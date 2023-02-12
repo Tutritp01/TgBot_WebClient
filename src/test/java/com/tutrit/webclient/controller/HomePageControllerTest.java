@@ -39,21 +39,21 @@ class HomePageControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    /**
-     * @see <a href="https://docs.spring.io/spring-security/site/docs/5.0.x/reference/html/test-mockmvc.html">Setting Up MockMvc and Spring Security</a>
-     */
-    @BeforeEach
-    public void setup() {
-        mockMvc = MockMvcBuilders
-                .webAppContextSetup(context)
+//    /**
+//     * @see <a href="https://docs.spring.io/spring-security/site/docs/5.0.x/reference/html/test-mockmvc.html">Setting Up MockMvc and Spring Security</a>
+//     */
+//    @BeforeEach
+//    public void setup() {
+//        mockMvc = MockMvcBuilders
+//                .webAppContextSetup(context)
 //                .apply(springSecurity())
-                .build();
-    }
+//                .build();
+//    }
 
     /*
     It is good practice having 'name' or 'id' attributes on key elements.
      */
-//    @Test
+    @Test
 //    @WithMockUser
     void openHomePage() throws Exception {
         when(engineerGateway.getEngineer()).thenReturn(new User("Mikas", 27));
@@ -71,9 +71,10 @@ class HomePageControllerTest {
         String html = result.getResponse().getContentAsString();
         Assertions.assertTrue(html.contains("<h1 id='user-data' class='m-0'>Mikas 27</h1>"));
         Document doc = Jsoup.parse(html);
-        final Elements userName = doc.selectXpath("/html/body/div/div[1]/div[1]/div/div/div[1]/h1");
-        Assertions.assertEquals("<h1 id=\"user-data\" class=\"m-0\">Mikas 27</h1>", userName.get(0).outerHtml());
-        Assertions.assertEquals("Mikas 27", userName.get(0).text());
+        final Elements userNameById = doc.selectXpath("//*[@id='user-data']");
+        final Elements userNameByFullPath = doc.selectXpath("/html/body/div/div[1]/div[1]/div/div/div[1]/h1");
+        Assertions.assertEquals("<h1 id=\"user-data\" class=\"m-0\">Mikas 27</h1>", userNameByFullPath.get(0).outerHtml());
+        Assertions.assertEquals("Mikas 27", userNameByFullPath.get(0).text());
     }
 
 //    @Test

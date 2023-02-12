@@ -57,7 +57,7 @@ public class HomePageControllerSeleniumCucumberTest {
     }
 
     public void loadApp() {
-        WebClientApplication.main(new String[0]);
+//        WebClientApplication.main(new String[0]);
     }
 
     public void setUp() {
@@ -69,5 +69,6 @@ public class HomePageControllerSeleniumCucumberTest {
 
     public void tearDown() {
         driver.close();
+        driver.quit();
     }
 }

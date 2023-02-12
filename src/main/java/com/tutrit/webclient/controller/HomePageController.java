@@ -24,13 +24,13 @@ public class HomePageController {
     @GetMapping("/")
     public ModelAndView openHomePage() throws Exception {
         ModelAndView mov = new ModelAndView();
-//        try {
-//            mov.addObject("user", engineerGateway.getEngineer());
-//        } catch (Exception e) {
-//            // handle absence of information
-//            mov.addObject("user", new User(null, null));
-//        }
-        mov.addObject("user", new User(null, null));
+        try {
+            mov.addObject("user", engineerGateway.getEngineer());
+        } catch (Exception e) {
+            // handle absence of information
+            mov.addObject("user", new User(null, null));
+        }
+//        mov.addObject("user", new User(null, null));
         mov.setViewName("index");
         return mov;
     }

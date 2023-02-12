@@ -10,14 +10,14 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 public class SeleniumTest {
-    WebDriver driver;
+    protected WebDriver driver;
     static {
         System.setProperty("webdriver.chrome.driver","chromedriver");
     }
 
     @BeforeAll
     public static void loadApp() {
-        WebClientApplication.main(new String[0]);
+//        WebClientApplication.main(new String[0]);
     }
     @BeforeEach
     public void setUp() {
@@ -30,5 +30,6 @@ public class SeleniumTest {
     @AfterEach
     public void tearDown() {
         driver.close();
+        driver.quit();
     }
 }

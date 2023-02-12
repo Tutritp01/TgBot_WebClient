@@ -21,7 +21,7 @@ class HomePageControllerSeleniumTest extends SeleniumTest {
     /**
      * @see <a href="https://www.selenium.dev/documentation/webdriver/waits/">selenium documentation</a>
      */
-//    @Test
+    @Test
     void openHomePage() {
         driver.get("http://localhost/");
         // Waiting 30 seconds for an element to be present on the page, checking
