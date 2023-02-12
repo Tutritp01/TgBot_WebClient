@@ -9,5 +9,5 @@ public record Car(String id,
                   String generation,
                   String modification,
                   String engine,
-                  int year) {
+                  Integer year) {
 }
