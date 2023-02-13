@@ -1,14 +1,17 @@
-<form>
-    <input name="carId">
-    <input name="carOwner">
-    <input name="carVin">
-    <input name="carPlateNumber">
-    <input name="carBrand">
-    <input name="carModel">
-    <input name="carGeneration">
-    <input name="carModification">
-    <input name="carEngine">
-    <input name="carYear">
-    <button type="submit">save</button>
-    <button type="reset">delete</button>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form method="post">
+    <!--/*@thymesVar id="car" type="com.tutrit.bean.Car"*/-->
+    <input name="carId" th:value="${car.id()}"/>
+    <input name="carOwner" th:value="${car.owner()}"/>
+    <input name="carVin" th:value="${car.vin()}"/>
+    <input name="carPlateNumber" th:value="${car.plateNumber()}"/>
+    <input name="carBrand" th:value="${car.brand()}"/>
+    <input name="carModel" th:value="${car.model()}"/>
+    <input name="carGeneration" th:value="${car.generation()}"/>
+    <input name="carModification" th:value="${car.modification()}"/>
+    <input name="carEngine" th:value="${car.engine()}"/>
+    <input name="carYear" th:value="${car.year()}"/>
+    <button name="save" type="submit">save</button>
+    <button name="delete" type="submit">delete</button>
 </form>
