@@ -8,6 +8,6 @@ public class DummyController {
 
     @GetMapping("/dummy")
     public String dummyEndpoint() {
-        return "status:ok17";
+        return "status:ok18";
     }
 }
