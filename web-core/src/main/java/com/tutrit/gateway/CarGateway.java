@@ -2,8 +2,13 @@ package com.tutrit.gateway;
 
 import com.tutrit.bean.Car;
 
+import java.util.List;
+
 public interface CarGateway {
-    Car findCarById(String id);
     Car saveCar(Car car);
-    boolean deleteCar(String id);
+    Iterable<Car> findCarById(String id);
+    List<Car> findAllCars();
+    Car update(String id);
+    boolean deleteCar(Car car);
+    boolean deleteCarById(String id);
 }
