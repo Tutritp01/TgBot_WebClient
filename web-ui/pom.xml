@@ -13,5 +13,15 @@
 
     <properties>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.tutrit</groupId>
+            <artifactId>web-core</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
