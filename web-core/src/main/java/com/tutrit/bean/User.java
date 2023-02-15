@@ -1,7 +1,7 @@
 package com.tutrit.bean;
 
 public record User(
-        String id,
+        String userId,
         String name,
         String phoneNumber
 ) {

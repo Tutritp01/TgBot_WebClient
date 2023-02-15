@@ -10,8 +10,10 @@
     </parent>
 
     <artifactId>web-core</artifactId>
+    
 
     <properties>
     </properties>
+
 
 </project>
