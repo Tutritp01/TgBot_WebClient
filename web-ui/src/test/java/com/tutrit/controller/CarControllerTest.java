@@ -1,6 +1,8 @@
 package com.tutrit.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Car;
+import com.tutrit.config.MySpringContext;
 import com.tutrit.gateway.CarGateway;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,24 +30,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @AutoConfigureMockMvc
-@ContextConfiguration
-@SpringBootTest
+@SpringBootTest(classes = MySpringContext.SpringConfig.class)
 class CarControllerTest {
 
     @MockBean
     CarGateway carGateway;
-//    @Autowired
-    private WebApplicationContext context = new GenericWebApplicationContext();
     @Autowired
     MockMvc mockMvc;
-
-    @BeforeEach
-    public void setup() {
-        mockMvc = MockMvcBuilders
-                .webAppContextSetup(context)
-                .apply(springSecurity())
-                .build();
-    }
+    @Autowired
+    ObjectMapper objectMapper;
 
     @Test
     void findCarById() throws Exception {
