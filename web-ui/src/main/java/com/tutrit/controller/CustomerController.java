@@ -1,13 +1,43 @@
 package com.tutrit.controller;
 
+import com.tutrit.bean.Customer;
 import com.tutrit.gateway.CustomerGateway;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Optional;
 
 @Controller
 public class CustomerController {
-    private final CustomerGateway customerGateway;
+    @Autowired
+    private CustomerGateway customerGateway;
 
-    public CustomerController(final CustomerGateway customerGateway) {
-        this.customerGateway = customerGateway;
+    @GetMapping("customers/{customerId}")
+    public ModelAndView findCustomerById(@PathVariable String customerId) {
+        var mov = new ModelAndView();
+        mov.addObject("customer", customerGateway.findCustomerById(customerId));
+        mov.setViewName("customer-form.html");
+        return mov;
+    }
+
+    @PostMapping("/customers/{id}")
+    public String saveCustomer(@PathVariable String id,
+                               @RequestParam String customerId,
+                               @RequestParam String name,
+                               @RequestParam String city,
+                               @RequestParam String phoneNumber,
+                               @RequestParam String email,
+                               @RequestParam Optional<String> save,
+                               @RequestParam Optional<String> delete) {
+        Customer customer = new Customer(customerId, name, city, phoneNumber, email);
+
+        save.ifPresent(i -> customerGateway.saveCustomer(customer));
+        // delete.ifPresent(i -> customerGateway.deleteCustomerById(id));
+        return "redirect:/customers/" + id;
     }
 }
