@@ -1,4 +1,4 @@
-package com.tutrit.controller;
+package com.tutrit.webclient.controller;
 
 import com.tutrit.bean.Car;
 import com.tutrit.gateway.CarGateway;

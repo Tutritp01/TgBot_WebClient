@@ -1,4 +1,4 @@
-package com.tutrit.controller;
+package com.tutrit.webclient.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Car;
