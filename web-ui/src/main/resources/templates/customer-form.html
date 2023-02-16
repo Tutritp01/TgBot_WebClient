@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <form>
     <!--/*@thymesVar id="customer" type="com.tutrit.bean.Customer"*/-->
-    <input name="customerId" th:value="${customer.id()}"/>
+    <input name="customerId" th:value="${customer.customerId()}"/>
     <input name="customerName" th:value="${customer.name()}"/>
     <input name="customerCity" th:value="${customer.city()}"/>
     <input name="customerPhoneNumber" th:value="${customer.phoneNumber()}"/>

@@ -46,17 +46,39 @@ class CustomerControllerTest {
                 .andExpect(model().attribute("customer", Matchers.equalTo(createCustomer())))
                 .andExpect(view().name("customer-form.html"))
                 .andReturn();
-//        String body = result.getResponse().getContentAsString();
-//        var actualCustomer = objectMapper.readValue(body, Customer.class);
-                Customer actualCustomer = (Customer) Objects.requireNonNull(result.getModelAndView()).getModel().get("customer");
+        Customer actualCustomer = (Customer) Objects.requireNonNull(result.getModelAndView()).getModel().get("customer");
         assertEquals(createCustomer(), actualCustomer);
     }
 
     @Test
-    void saveCar() {
+    void saveCustomer() throws Exception {
+        when(customerGateway.saveCustomer(createDummyCustomer())).thenReturn(createCustomer());
+
+        final MvcResult result = mockMvc
+                .perform(MockMvcRequestBuilders.post(("/customers/23?" +
+                        "customerId=3432" +
+                        "&name=dpfsk" +
+                        "&city=dfkj" +
+                        "&phoneNumber=394248" +
+                        "&email=834rjfds" +
+                        "&save=true"))
+                        )
+                .andExpect(view().name("redirect:/customers/23"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        String body = result.getResponse().getContentAsString();
+        var actualCustomer = objectMapper.readValue(body, Customer.class);
+        assertEquals(createCustomer(), actualCustomer);
     }
 
     private Customer createCustomer() {
-        return new Customer("id", "name", "city", "phoneNumber", "email");
+        return new Customer("23453434", "name", "city", "phoneNumber", "email");
     }
+
+    private Customer createDummyCustomer() {
+        return new Customer("123", "name", "city", "phoneNumber", "email");
+    }
+
 }

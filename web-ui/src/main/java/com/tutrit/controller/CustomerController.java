@@ -2,6 +2,7 @@ package com.tutrit.controller;
 
 import com.tutrit.bean.Customer;
 import com.tutrit.gateway.CustomerGateway;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,7 @@ public class CustomerController {
 
     @PostMapping("/customers/{id}")
     public String saveCustomer(@PathVariable String id,
+                               HttpServletRequest r,
                                @RequestParam String customerId,
                                @RequestParam String name,
                                @RequestParam String city,
@@ -38,6 +40,8 @@ public class CustomerController {
 
         save.ifPresent(i -> customerGateway.saveCustomer(customer));
         // delete.ifPresent(i -> customerGateway.deleteCustomerById(id));
+        customerGateway.saveCustomer(customer);
+
         return "redirect:/customers/" + id;
     }
 }
