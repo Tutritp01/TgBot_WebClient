@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<form>
+
+
+<form method="post">
     <!--/*@thymesVar id="customer" type="com.tutrit.bean.Customer"*/-->
     <input name="customerId" th:value="${customer.customerId()}"/>
     <input name="customerName" th:value="${customer.name()}"/>
@@ -10,3 +12,6 @@
     <button name="save" type="submit">save</button>
     <button name="delete" type="submit">delete</button>
 </form>
+
+<th:block th:insert="errors.html :: errors"></th:block>
+

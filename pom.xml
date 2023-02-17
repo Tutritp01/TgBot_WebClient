@@ -8,6 +8,7 @@
     <packaging>pom</packaging>
     <name>web-client</name>
     <description>Web client for TgBot</description>
+
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>

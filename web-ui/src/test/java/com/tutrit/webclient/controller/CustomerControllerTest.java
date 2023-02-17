@@ -3,7 +3,7 @@ package com.tutrit.webclient.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Customer;
 import com.tutrit.gateway.CustomerGateway;
-import com.tutrit.webclient.config.MySpringContext;
+import com.tutrit.webclient.config.SpringContext;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -25,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @AutoConfigureMockMvc
-@SpringBootTest(classes = MySpringContext.SpringConfig.class)
+@SpringBootTest(classes = SpringContext.SpringConfig.class)
 class CustomerControllerTest {
 
     @MockBean
@@ -37,7 +38,7 @@ class CustomerControllerTest {
 
     @Test
     void findCustomerById() throws Exception {
-        when(customerGateway.findCustomerById("234")).thenReturn(createCustomer());
+        when(customerGateway.findCustomerById("234")).thenReturn(Optional.of((createCustomer())));
 
         final MvcResult result = mockMvc
                 .perform(MockMvcRequestBuilders.get("/customers/234"))
