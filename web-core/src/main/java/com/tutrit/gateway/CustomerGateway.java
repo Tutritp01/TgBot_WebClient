@@ -5,4 +5,5 @@ import com.tutrit.bean.Customer;
 public interface CustomerGateway {
     Customer saveCustomer (Customer customer);
     Customer findCustomerById(String customerId);
+    boolean deleteCustomerById(String customerId);
 }
