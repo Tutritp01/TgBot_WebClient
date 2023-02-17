@@ -1,4 +1,4 @@
-package com.tutrit.controller;
+package com.tutrit.webclient.controller;
 
 import com.tutrit.bean.Customer;
 import com.tutrit.gateway.CustomerGateway;
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Controller
 public class CustomerController {
-    @Autowired
+    @Autowired(required = false)
     private CustomerGateway customerGateway;
 
     @GetMapping("customers/{customerId}")
@@ -36,11 +36,10 @@ public class CustomerController {
                                @RequestParam String email,
                                @RequestParam Optional<String> save,
                                @RequestParam Optional<String> delete) {
-        Customer customer = new Customer(customerId, name, city, phoneNumber, email);
+        var customer = new Customer(customerId, name, city, phoneNumber, email);
 
         save.ifPresent(i -> customerGateway.saveCustomer(customer));
-        // delete.ifPresent(i -> customerGateway.deleteCustomerById(id));
-        customerGateway.saveCustomer(customer);
+        delete.ifPresent(i -> customerGateway.deleteCustomerById(customerId));
 
         return "redirect:/customers/" + id;
     }

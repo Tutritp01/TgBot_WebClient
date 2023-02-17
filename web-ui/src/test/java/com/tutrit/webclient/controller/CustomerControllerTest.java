@@ -1,11 +1,12 @@
-package com.tutrit.controller;
+package com.tutrit.webclient.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Customer;
-import com.tutrit.config.MySpringContext;
 import com.tutrit.gateway.CustomerGateway;
+import com.tutrit.webclient.config.MySpringContext;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,7 +35,6 @@ class CustomerControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-
     @Test
     void findCustomerById() throws Exception {
         when(customerGateway.findCustomerById("234")).thenReturn(createCustomer());
@@ -52,33 +52,43 @@ class CustomerControllerTest {
 
     @Test
     void saveCustomer() throws Exception {
-        when(customerGateway.saveCustomer(createDummyCustomer())).thenReturn(createCustomer());
-
-        final MvcResult result = mockMvc
-                .perform(MockMvcRequestBuilders.post(("/customers/23?" +
-                        "customerId=3432" +
-                        "&name=dpfsk" +
-                        "&city=dfkj" +
-                        "&phoneNumber=394248" +
-                        "&email=834rjfds" +
-                        "&save=true"))
-                        )
+        final MvcResult mvcResult = mockMvc
+                .perform(MockMvcRequestBuilders.post("/customers/23?" +
+                                "customerId=32" +
+                                "&name=Vlad" +
+                                "&city=Brest" +
+                                "&phoneNumber=+3754478937721" +
+                                "&email=VladVrest@mail.com")
+                        .param("save", "push"))
                 .andExpect(view().name("redirect:/customers/23"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
+        Mockito.verify(customerGateway).saveCustomer(verifyCustomer());
+    }
 
-        String body = result.getResponse().getContentAsString();
-        var actualCustomer = objectMapper.readValue(body, Customer.class);
-        assertEquals(createCustomer(), actualCustomer);
+    @Test
+    void deleteCustomer() throws Exception {
+        final MvcResult mvcResult = mockMvc
+                .perform(MockMvcRequestBuilders.post("/customers/23?" +
+                                "customerId=32" +
+                                "&name=Vlad" +
+                                "&city=Brest" +
+                                "&phoneNumber=+3754478937721" +
+                                "&email=VladVrest@mail.com")
+                        .param("delete", "push"))
+                .andExpect(view().name("redirect:/customers/23"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+        Mockito.verify(customerGateway).deleteCustomerById("32");
     }
 
     private Customer createCustomer() {
         return new Customer("23453434", "name", "city", "phoneNumber", "email");
     }
 
-    private Customer createDummyCustomer() {
-        return new Customer("123", "name", "city", "phoneNumber", "email");
+    private Customer verifyCustomer() {
+        return new Customer("32", "Vlad", "Brest", "+3754478937721", "VladVrest@mail.com");
     }
-
 }
