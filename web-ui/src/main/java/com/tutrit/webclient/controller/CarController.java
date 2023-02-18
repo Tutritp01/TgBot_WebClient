@@ -16,10 +16,10 @@ public class CarController {
     @Autowired(required = false)
     private CarGateway carGateway;
 
-    @GetMapping("/{carId}")
-    public ModelAndView findCarById(@PathVariable String carId) {
+    @GetMapping("/{id}")
+    public ModelAndView findCarById(@PathVariable String id) {
         var mov = new ModelAndView();
-        mov.addObject("car", carGateway.findCarById(carId));
+        mov.addObject("car", carGateway.findCarById(id));
         mov.setViewName("car-form");
         return mov;
     }
@@ -41,7 +41,6 @@ public class CarController {
         Car car = new Car(carId, owner, vin, plateNumber, brand, model, generation, modification, engine, year);
 
         save.ifPresent(i -> carGateway.saveCar(car));
-        delete.ifPresent(i -> carGateway.deleteCarById(id));
         return "redirect:/cars/" + id;
     }
 }

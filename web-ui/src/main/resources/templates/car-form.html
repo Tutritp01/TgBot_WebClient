@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <form method="post">
+    <!--/*@thymesVar id="car" type="com.tutrit.bean.Car"*/-->
     <input name="carId" th:value="${car.carId()}"/>
     <input name="owner" th:value="${car.owner()}"/>
     <input name="vin" th:value="${car.vin()}"/>

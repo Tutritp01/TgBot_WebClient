@@ -6,22 +6,23 @@ import com.tutrit.config.MySpringContext;
 import com.tutrit.gateway.CarGateway;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.Collections;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
 @SpringBootTest(classes = MySpringContext.SpringConfig.class)
@@ -36,11 +37,10 @@ class CarControllerTest {
 
     @Test
     void findCarById() throws Exception {
-        when(carGateway.findCarById("id1"))
-                .thenReturn(Collections.singleton(new Car("id1", "owner", "vin", "plateNumber", "brand1", "model1", "1g", "mod1", "engine1", 2001)));
+        when(carGateway.findCarById("id1")).thenReturn(makeCar());
 
-        final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/cars"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+        final MvcResult result = mockMvc.perform(get("/cars/id1"))
+                .andExpect(status().isOk())
                 .andExpect(model().attribute("car", Matchers.equalTo(makeCar())))
                 .andExpect(view().name("car-form"))
                 .andReturn();
@@ -50,10 +50,30 @@ class CarControllerTest {
     }
 
     @Test
-    void saveCar() {
+    void saveCar() throws Exception {
+        when(carGateway.saveCar(new Car("id1", "owner1", "vin1", "plateNumber1", "brand1", "model1", "1g", "mod1", "engine1", 2001))).thenReturn(makeCar());
+
+        mockMvc.perform(post("/cars/id1")
+                        .param("carId", "id1")
+                        .param("owner", "owner1")
+                        .param("vin", "vin1")
+                        .param("plateNumber", "plateNumber1")
+                        .param("brand", "brand1")
+                        .param("model", "model1")
+                        .param("generation", "1g")
+                        .param("modification", "mod1")
+                        .param("engine", "engine1")
+                        .param("year", "2001")
+                        .param("save", "push"))
+                .andExpect(view().name("redirect:/cars/id1"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        Mockito.verify(carGateway).saveCar(makeCar());
     }
 
     private Car makeCar() {
-        return new Car("id1", "owner", "vin", "plateNumber", "brand1", "model1", "1g", "mod1", "engine1", 2001);
+        return new Car("id1", "owner1", "vin1", "plateNumber1", "brand1", "model1", "1g", "mod1", "engine1", 2001);
     }
 }
