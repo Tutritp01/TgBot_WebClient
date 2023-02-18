@@ -1,6 +1,6 @@
 package com.tutrit.bean;
 
-public record Car(String id,
+public record Car(String carId,
                   String owner,
                   String vin,
                   String plateNumber,

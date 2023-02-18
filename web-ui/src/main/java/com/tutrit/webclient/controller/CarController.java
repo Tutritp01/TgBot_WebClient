@@ -16,11 +16,11 @@ public class CarController {
     @Autowired(required = false)
     private CarGateway carGateway;
 
-    @GetMapping("/{id}")
-    public ModelAndView findCarById(@PathVariable String id) {
+    @GetMapping("/{carId}")
+    public ModelAndView findCarById(@PathVariable String carId) {
         var mov = new ModelAndView();
-        mov.addObject("car", carGateway.findCarById(id));
-        mov.setViewName("car-form.html");
+        mov.addObject("car", carGateway.findCarById(carId));
+        mov.setViewName("car-form");
         return mov;
     }
 
