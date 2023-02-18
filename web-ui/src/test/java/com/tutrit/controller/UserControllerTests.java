@@ -40,7 +40,8 @@ class UserControllerTests {
     void findUserById() throws Exception {
         when(userGateway.findUserById("666"))
                 .thenReturn(createUser());
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/users/666"))
+        MvcResult result = mockMvc
+                .perform(MockMvcRequestBuilders.get("/users/666"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(model().attribute("user", Matchers.equalTo(createUser())))
