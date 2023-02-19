@@ -13,14 +13,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
@@ -41,7 +42,7 @@ class EngineerControllerTest {
         final MvcResult result = mockMvc.perform(get("/engineers/id1"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("engineer", Matchers.equalTo(makeEngineer())))
-                .andExpect(view().name("makeEngineer-form"))
+                .andExpect(view().name("engineer-form"))
                 .andReturn();
 
         Engineer actualEngineer = (Engineer) Objects.requireNonNull(result.getModelAndView()).getModel().get("engineer");
@@ -50,27 +51,49 @@ class EngineerControllerTest {
 
     @Test
     void saveEngineer() throws Exception {
-        when(engineerGateway.saveEngineer(new Engineer("id1", "firstName1", "lastName1", "function1", "category1", "education1", 3, 10))).thenReturn(makeEngineer());
-
-        mockMvc.perform(post("/engineers/id1")
-                        .param("engineerId", "id1")
-                        .param("firstName", "firstName1")
-                        .param("lastName", "lastName1")
-                        .param("function", "function1")
-                        .param("category", "category1")
-                        .param("education", "education1")
-                        .param("experience", "3")
-                        .param("generalExperience", "10")
+        final MvcResult mvcResult = mockMvc
+                .perform(MockMvcRequestBuilders.post("/engineers/52?" +
+                                "engineerId=52" +
+                                "&firstName=firstName1" +
+                                "&lastName=lastName1" +
+                                "&function=function1" +
+                                "&category=category1" +
+                                "&education=education1" +
+                                "&experience=3" +
+                                "&generalExperience=10")
                         .param("save", "push"))
-                .andExpect(view().name("redirect:/engineers/id1"))
-                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/engineers/52"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
+        Mockito.verify(engineerGateway).saveEngineer(verifyEngineer());
+    }
 
-        Mockito.verify(engineerGateway).saveEngineer(makeEngineer());
+    @Test
+    void deleteEngineer() throws Exception {
+        final MvcResult mvcResult = mockMvc
+                .perform(MockMvcRequestBuilders.post("/engineers/52?" +
+                                "engineerId=52" +
+                                "&firstName=firstName1" +
+                                "&lastName=lastName1" +
+                                "&function=function1" +
+                                "&category=category1" +
+                                "&education=education1" +
+                                "&experience=3" +
+                                "&generalExperience=10")
+                        .param("delete", "push"))
+                .andExpect(view().name("redirect:/engineers/52"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+        Mockito.verify(engineerGateway).deleteEngineerById("52");
     }
 
     private Engineer makeEngineer() {
         return new Engineer("id1", "firstName1", "lastName1", "function1", "category1", "education1", 3, 10);
+    }
+
+    private Engineer verifyEngineer() {
+        return new Engineer("52", "firstName1", "lastName1", "function1", "category1", "education1", 3, 10);
     }
 }

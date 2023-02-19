@@ -10,13 +10,13 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/engineer")
+//@RequestMapping("/engineers")
 public class EngineerController {
 
     @Autowired(required = false)
     private EngineerGateway engineerGateway;
 
-    @GetMapping("/{id}")
+    @GetMapping("engineers/{id}")
     public ModelAndView findEngineerById(@PathVariable String id) {
         var mov = new ModelAndView();
         mov.addObject("engineer", engineerGateway.findEngineerById(id));
@@ -24,7 +24,7 @@ public class EngineerController {
         return mov;
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("engineers/{id}")
     public String saveEngineer(@PathVariable String id,
                           @RequestParam String engineerId,
                           @RequestParam String firstName,
@@ -40,6 +40,7 @@ public class EngineerController {
         Engineer engineer = new Engineer(engineerId, firstName, lastName, function, category, education, experience, generalExperience);
 
         save.ifPresent(i -> engineerGateway.saveEngineer(engineer));
+        delete.ifPresent(i -> engineerGateway.deleteEngineerById(engineerId));
         return "redirect:/engineers/" + id;
     }
 
