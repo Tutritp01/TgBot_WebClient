@@ -1,6 +1,5 @@
 package com.tutrit.webclient.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Car;
 import com.tutrit.config.MySpringContext;
 import com.tutrit.gateway.CarGateway;
@@ -32,8 +31,6 @@ class CarControllerTest {
     CarGateway carGateway;
     @Autowired
     MockMvc mockMvc;
-    @Autowired
-    ObjectMapper objectMapper;
 
     @Test
     void findCarById() throws Exception {
