@@ -28,7 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest(classes = SpringContext.SpringConfig.class)
 class CustomerControllerTest {
-
     @MockBean
     CustomerGateway customerGateway;
     @Autowired
@@ -49,6 +48,24 @@ class CustomerControllerTest {
                 .andReturn();
         Customer actualCustomer = (Customer) Objects.requireNonNull(result.getModelAndView()).getModel().get("customer");
         assertEquals(createCustomer(), actualCustomer);
+    }
+
+    @Test
+    void findCustomerByIdIfCustomerNull() throws Exception {
+        when(customerGateway.findCustomerById("234")).thenReturn(Optional.of((customerIsNull())));
+
+        final MvcResult result = mockMvc
+                .perform(MockMvcRequestBuilders.get("/customers/234"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(model().attribute("customer", Matchers.equalTo(customerIsNull())))
+                .andExpect(view().name("customer-form.html"))
+                .andExpect(model().attribute("error", Matchers.equalTo("Customer not found")))
+                .andReturn();
+        Customer actualCustomer = (Customer) Objects.requireNonNull(result.getModelAndView()).getModel().get("customer");
+        assertEquals(customerIsNull(), actualCustomer);
+
+
     }
 
     @Test
@@ -87,6 +104,10 @@ class CustomerControllerTest {
 
     private Customer createCustomer() {
         return new Customer("23453434", "name", "city", "phoneNumber", "email");
+    }
+
+    private Customer customerIsNull() {
+        return new Customer(null, null, null, null, null);
     }
 
     private Customer verifyCustomer() {
