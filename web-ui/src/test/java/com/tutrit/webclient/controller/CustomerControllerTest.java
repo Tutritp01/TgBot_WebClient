@@ -52,18 +52,18 @@ class CustomerControllerTest {
 
     @Test
     void findCustomerByIdIfCustomerNull() throws Exception {
-        when(customerGateway.findCustomerById("234")).thenReturn(Optional.of((customerIsNull())));
+        when(customerGateway.findCustomerById("231")).thenReturn((customerIsNull()));
 
         final MvcResult result = mockMvc
-                .perform(MockMvcRequestBuilders.get("/customers/234"))
+                .perform(MockMvcRequestBuilders.get("/customers/231"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(model().attribute("customer", Matchers.equalTo(customerIsNull())))
+                .andExpect(model().attribute("customer", Matchers.equalTo(expectedCustomer())))
                 .andExpect(view().name("customer-form.html"))
                 .andExpect(model().attribute("error", Matchers.equalTo("Customer not found")))
                 .andReturn();
         Customer actualCustomer = (Customer) Objects.requireNonNull(result.getModelAndView()).getModel().get("customer");
-        assertEquals(customerIsNull(), actualCustomer);
+        assertEquals(expectedCustomer(), actualCustomer);
 
 
     }
@@ -106,7 +106,10 @@ class CustomerControllerTest {
         return new Customer("23453434", "name", "city", "phoneNumber", "email");
     }
 
-    private Customer customerIsNull() {
+    private Optional<Customer> customerIsNull() {
+        return Optional.empty();
+    }
+    private Customer expectedCustomer(){
         return new Customer(null, null, null, null, null);
     }
 

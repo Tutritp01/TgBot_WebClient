@@ -24,8 +24,11 @@ public class CustomerController {
         customerGateway.findCustomerById(customerId)
                 .ifPresentOrElse(
                         c -> mov.addObject("customer", c),
-                        () -> mov.addObject("customer", new Customer(null, null, null, null, null)));
-        mov.addObject("error", "Customer not found");
+                        () -> {
+                            mov.addObject("customer", new Customer(null, null, null, null, null));
+                            mov.addObject("error", "Customer not found");
+                        });
+
         mov.setViewName("customer-form.html");
         return mov;
     }
