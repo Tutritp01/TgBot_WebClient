@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -37,7 +38,7 @@ class CustomerControllerTest {
 
     @Test
     void findCustomerById() throws Exception {
-        when(customerGateway.findCustomerById("234")).thenReturn(createCustomer());
+        when(customerGateway.findCustomerById("234")).thenReturn(Optional.of((createCustomer())));
 
         final MvcResult result = mockMvc
                 .perform(MockMvcRequestBuilders.get("/customers/234"))
