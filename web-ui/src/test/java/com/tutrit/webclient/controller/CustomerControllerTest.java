@@ -3,7 +3,7 @@ package com.tutrit.webclient.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Customer;
 import com.tutrit.gateway.CustomerGateway;
-import com.tutrit.webclient.config.MySpringContext;
+import com.tutrit.webclient.config.SpringContext;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @AutoConfigureMockMvc
-@SpringBootTest(classes = MySpringContext.SpringConfig.class)
+@SpringBootTest(classes = SpringContext.SpringConfig.class)
 class CustomerControllerTest {
 
     @MockBean
