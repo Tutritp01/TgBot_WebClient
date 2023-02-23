@@ -44,7 +44,7 @@ class CustomerControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(model().attribute("customer", Matchers.equalTo(createCustomer())))
-                .andExpect(view().name("customer-form.html"))
+                .andExpect(view().name("customer-form"))
                 .andReturn();
         Customer actualCustomer = (Customer) Objects.requireNonNull(result.getModelAndView()).getModel().get("customer");
         assertEquals(createCustomer(), actualCustomer);
@@ -109,7 +109,8 @@ class CustomerControllerTest {
     private Optional<Customer> customerIsNull() {
         return Optional.empty();
     }
-    private Customer expectedCustomer(){
+
+    private Customer expectedCustomer() {
         return new Customer(null, null, null, null, null);
     }
 

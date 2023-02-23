@@ -2,7 +2,6 @@ package com.tutrit.webclient.controller;
 
 import com.tutrit.bean.Customer;
 import com.tutrit.gateway.CustomerGateway;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,13 +28,12 @@ public class CustomerController {
                             mov.addObject("error", "Customer not found");
                         });
 
-        mov.setViewName("customer-form.html");
+        mov.setViewName("customer-form");
         return mov;
     }
 
     @PostMapping("/customers/{id}")
     public String saveCustomer(@PathVariable String id,
-                               HttpServletRequest r,
                                @RequestParam String customerId,
                                @RequestParam String name,
                                @RequestParam String city,
