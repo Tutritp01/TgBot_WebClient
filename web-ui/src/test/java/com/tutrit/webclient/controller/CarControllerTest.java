@@ -1,7 +1,7 @@
 package com.tutrit.webclient.controller;
 
 import com.tutrit.bean.Car;
-import com.tutrit.config.MySpringContext;
+import com.tutrit.config.SpringContext;
 import com.tutrit.gateway.CarGateway;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
-@SpringBootTest(classes = MySpringContext.SpringConfig.class)
+@SpringBootTest(classes = SpringContext.SpringConfig.class)
 class CarControllerTest {
 
     @MockBean
