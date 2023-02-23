@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -38,12 +39,12 @@ class CarControllerTest {
 
         final MvcResult result = mockMvc.perform(get("/cars/id1"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("car", Matchers.equalTo(makeCar())))
+                .andExpect(model().attribute("car", Matchers.equalTo(makeCar().get())))
                 .andExpect(view().name("car-form"))
                 .andReturn();
 
         Car actualCar = (Car) Objects.requireNonNull(result.getModelAndView()).getModel().get("car");
-        assertEquals(makeCar(), actualCar);
+        assertEquals(makeCar().get(), actualCar);
     }
 
     @Test
@@ -67,10 +68,11 @@ class CarControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
 
-        Mockito.verify(carGateway).saveCar(makeCar());
+        Mockito.verify(carGateway).saveCar(makeCar().get());
     }
 
-    private Car makeCar() {
-        return new Car("id1", "owner1", "vin1", "plateNumber1", "brand1", "model1", "1g", "mod1", "engine1", 2001);
+    private Optional<Car> makeCar() {
+        Optional<Car> car = Optional.of(new Car("id1", "owner1", "vin1", "plateNumber1", "brand1", "model1", "1g", "mod1", "engine1", 2001));
+        return car;
     }
 }
