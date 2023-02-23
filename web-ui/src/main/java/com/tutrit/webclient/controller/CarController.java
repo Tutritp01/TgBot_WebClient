@@ -2,6 +2,7 @@ package com.tutrit.webclient.controller;
 
 import com.tutrit.bean.Car;
 import com.tutrit.bean.CarBuilder;
+import com.tutrit.controller.gateway.CarGatewayHttp;
 import com.tutrit.gateway.CarGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,8 +16,8 @@ import java.util.function.Consumer;
 @RequestMapping("/cars")
 public class CarController {
 
-    @Autowired(required = false)
-    private CarGateway carGateway;
+    //    @Autowired(required = false)
+    private CarGateway carGateway = new CarGatewayHttp();
 
     @GetMapping("/{id}")
     public ModelAndView findCarById(@PathVariable String id) {
