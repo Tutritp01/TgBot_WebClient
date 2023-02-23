@@ -22,8 +22,8 @@ public class CarController {
     public ModelAndView findCarById(@PathVariable String id) {
         var mov = new ModelAndView();
         carGateway.findCarById(id)
-                        .ifPresentOrElse(addCarToModel(mov),
-                                addEmptyCar(mov));
+                .ifPresentOrElse(addCarToModel(mov),
+                        addEmptyCar(mov));
         mov.setViewName("car-form");
         return mov;
     }
@@ -40,8 +40,7 @@ public class CarController {
                           @RequestParam String modification,
                           @RequestParam String engine,
                           @RequestParam Integer year,
-                          @RequestParam Optional<String> save,
-                          @RequestParam Optional<String> delete) {
+                          @RequestParam Optional<String> save) {
         Car car = CarBuilder.builder()
                 .carId(carId)
                 .owner(owner)
@@ -61,9 +60,7 @@ public class CarController {
 
 
     private Runnable addEmptyCar(ModelAndView mov) {
-        return () -> {
-            mov.addObject("car", new Car(null, null, null, null, null, null, null, null, null, null));
-        };
+        return () -> mov.addObject("car", new Car(null, null, null, null, null, null, null, null, null, null));
     }
 
     private Consumer<Car> addCarToModel(ModelAndView mov) {
