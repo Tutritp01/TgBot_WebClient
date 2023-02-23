@@ -14,8 +14,9 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.tutrit</groupId>
             <artifactId>web-core</artifactId>
@@ -39,6 +40,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>

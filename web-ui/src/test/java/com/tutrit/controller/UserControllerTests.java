@@ -2,7 +2,7 @@ package com.tutrit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.User;
-import com.tutrit.config.MySpringContext;
+import com.tutrit.config.SpringContext;
 import com.tutrit.gateway.UserGateway;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -25,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @AutoConfigureMockMvc
-@SpringBootTest(classes = MySpringContext.SpringConfig.class)
+@SpringBootTest(classes = SpringContext.SpringConfig.class)
 class UserControllerTests {
     @MockBean
     UserGateway userGateway;
@@ -39,7 +40,7 @@ class UserControllerTests {
     @Test
     void findUserById() throws Exception {
         when(userGateway.findUserById("666"))
-                .thenReturn(createUser());
+                .thenReturn(Optional.of(createUser()));
         MvcResult result = mockMvc
                 .perform(MockMvcRequestBuilders.get("/users/666"))
                 .andDo(MockMvcResultHandlers.print())
@@ -49,6 +50,20 @@ class UserControllerTests {
                 .andReturn();
         User actualUser = (User) Objects.requireNonNull(result.getModelAndView()).getModel().get("user");
         assertEquals(createUser(), actualUser);
+    }
+
+    @Test
+    void findUserByIdIfUserNull() throws Exception {
+        when(userGateway.findUserById("222"))
+                .thenReturn(Optional.empty());
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/users/222"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(model().attribute("user", Matchers.equalTo(userHasNullOfFields())))
+                .andExpect(model().attribute("error_404", Matchers.equalTo("User not found")))
+                .andExpect(view().name("user-form.html"))
+                .andReturn();
+        User actualUser = (User) Objects.requireNonNull(mvcResult.getModelAndView()).getModel().get("user");
+        assertEquals(userHasNullOfFields(), actualUser);
     }
 
     @Test
@@ -85,5 +100,9 @@ class UserControllerTests {
 
     private User verifyUser() {
         return new User("1", "FreddyMercury", "+37525987");
+    }
+
+    private User userHasNullOfFields() {
+        return new User(null, null, null);
     }
 }

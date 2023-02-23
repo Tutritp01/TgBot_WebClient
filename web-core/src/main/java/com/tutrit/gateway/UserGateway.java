@@ -2,10 +2,12 @@ package com.tutrit.gateway;
 
 import com.tutrit.bean.User;
 
-public interface UserGateway {
-    User findUserById(String userId);
+import java.util.Optional;
 
-    User saveUser(User user);
+public interface UserGateway {
+    Optional<User> findUserById(String userId);
+
+    Optional<User> saveUser(User user);
 
     boolean deleteUserById(String userId);
 }
