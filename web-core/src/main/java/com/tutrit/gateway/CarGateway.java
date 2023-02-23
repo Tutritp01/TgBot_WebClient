@@ -1,13 +1,10 @@
 package com.tutrit.gateway;
 
 import com.tutrit.bean.Car;
-import org.springframework.stereotype.Component;
 
-@Component
+import java.util.Optional;
+
 public interface CarGateway {
-    Car getCar();
-    String saveCar();
-    String updateCar();
-    String changeCar();
-    boolean deleteCar();
+    Optional<Car> saveCar(Car car);
+    Optional<Car> findCarById(String id);
 }

@@ -1,6 +1,9 @@
 package com.tutrit.bean;
 
-public record Car(String id,
+import io.soabase.recordbuilder.core.RecordBuilder;
+
+@RecordBuilder
+public record Car(String carId,
                   String owner,
                   String vin,
                   String plateNumber,
