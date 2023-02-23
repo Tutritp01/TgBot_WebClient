@@ -37,7 +37,8 @@ class CustomerControllerTest {
 
     @Test
     void findCustomerById() throws Exception {
-        when(customerGateway.findCustomerById("234")).thenReturn(Optional.of((createCustomer())));
+        when(customerGateway.findCustomerById("234"))
+                .thenReturn(Optional.of((createCustomer())));
 
         final MvcResult result = mockMvc
                 .perform(MockMvcRequestBuilders.get("/customers/234"))
@@ -59,24 +60,22 @@ class CustomerControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(model().attribute("customer", Matchers.equalTo(expectedCustomer())))
-                .andExpect(view().name("customer-form.html"))
+                .andExpect(view().name("customer-form"))
                 .andExpect(model().attribute("error", Matchers.equalTo("Customer not found")))
                 .andReturn();
         Customer actualCustomer = (Customer) Objects.requireNonNull(result.getModelAndView()).getModel().get("customer");
         assertEquals(expectedCustomer(), actualCustomer);
-
-
     }
 
     @Test
     void saveCustomer() throws Exception {
         final MvcResult mvcResult = mockMvc
-                .perform(MockMvcRequestBuilders.post("/customers/23?" +
-                                "customerId=32" +
-                                "&name=Vlad" +
-                                "&city=Brest" +
-                                "&phoneNumber=+3754478937721" +
-                                "&email=VladVrest@mail.com")
+                .perform(MockMvcRequestBuilders.post("/customers/23")
+                        .param("customerId", "32")
+                        .param("name", "Vlad")
+                        .param("city", "Brest")
+                        .param("phoneNumber", "+3754478937721")
+                        .param("email", "VladVrest@mail.com")
                         .param("save", "push"))
                 .andExpect(view().name("redirect:/customers/23"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
@@ -88,12 +87,12 @@ class CustomerControllerTest {
     @Test
     void deleteCustomer() throws Exception {
         final MvcResult mvcResult = mockMvc
-                .perform(MockMvcRequestBuilders.post("/customers/23?" +
-                                "customerId=32" +
-                                "&name=Vlad" +
-                                "&city=Brest" +
-                                "&phoneNumber=+3754478937721" +
-                                "&email=VladVrest@mail.com")
+                .perform(MockMvcRequestBuilders.post("/customers/23")
+                        .param("customerId", "32")
+                        .param("name", "Vlad")
+                        .param("city", "Brest")
+                        .param("phoneNumber", "+3754478937721")
+                        .param("email", "VladVrest@mail.com")
                         .param("delete", "push"))
                 .andExpect(view().name("redirect:/customers/23"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
