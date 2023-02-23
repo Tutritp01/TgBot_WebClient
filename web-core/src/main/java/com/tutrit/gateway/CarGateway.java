@@ -2,11 +2,13 @@ package com.tutrit.gateway;
 
 import com.tutrit.bean.Car;
 
+import java.util.Optional;
+
 public interface CarGateway {
-    Car saveCar(Car car);
-    Car findCarById(String id);
+    Optional<Car> saveCar(Car car);
+    Optional<Car> findCarById(String id);
     Iterable<Car> findAllCars();
-    Car update(String id);
+    Optional<Car> update(String id);
     boolean deleteCar(Car car);
     boolean deleteCarById(String id);
 }
