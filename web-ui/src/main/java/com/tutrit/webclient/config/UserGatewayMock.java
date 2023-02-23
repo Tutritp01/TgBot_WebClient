@@ -18,8 +18,6 @@ public class UserGatewayMock {
                 return userId.equals("2") ?
                         Optional.of(new User("2", "KurtCobain", "+375294561234"))
                         : Optional.empty();
-//           return Optional.of(new User("2", "KurtCobain", "+375294561234"));
-//           return Optional.empty();
             }
 
             @Override
@@ -31,10 +29,6 @@ public class UserGatewayMock {
             public boolean deleteUserById(String userId) {
                 return false;
             }
-
-
         };
     }
-
-
 }

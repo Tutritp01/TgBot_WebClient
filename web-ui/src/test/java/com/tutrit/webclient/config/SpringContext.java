@@ -1,4 +1,4 @@
-package com.tutrit.config;
+package com.tutrit.webclient.config;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

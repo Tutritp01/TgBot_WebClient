@@ -1,4 +1,4 @@
-package com.tutrit.config;
+package com.tutrit.webclient.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;

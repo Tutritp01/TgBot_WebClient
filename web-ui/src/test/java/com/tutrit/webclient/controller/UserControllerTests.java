@@ -1,8 +1,8 @@
-package com.tutrit.controller;
+package com.tutrit.webclient.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.User;
-import com.tutrit.config.SpringContext;
+import com.tutrit.webclient.config.SpringContext;
 import com.tutrit.gateway.UserGateway;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;

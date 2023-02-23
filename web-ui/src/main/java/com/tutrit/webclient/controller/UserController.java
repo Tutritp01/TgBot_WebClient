@@ -1,6 +1,5 @@
 package com.tutrit.webclient.controller;
 
-
 import com.tutrit.bean.User;
 import com.tutrit.gateway.UserGateway;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +23,9 @@ public class UserController {
         var mov = new ModelAndView();
         userGateway.findUserById(userId).ifPresentOrElse(
                 c -> mov.addObject("user", c),
-                () ->{
+                () -> {
                     mov.addObject("user", new User(null, null, null));
-                    mov.addObject("error_404","User not found");
+                    mov.addObject("error_404", "User not found");
                 });
         mov.setViewName("user-form.html");
         return mov;
@@ -42,9 +41,6 @@ public class UserController {
         var user = new User(userId, name, phoneNumber);
         save.ifPresent(i -> userGateway.saveUser(user));
         delete.ifPresent(i -> userGateway.deleteUserById(userId));
-
         return "redirect:/users/" + id;
     }
-
-
 }
