@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <form method="post">
+    <!--/*@thymesVar id="error" type="java.lang.String"*/-->
+    <h1 th:if="${error}!=null" th:text="${error}"></h1>
     <!--/*@thymesVar id="customer" type="com.tutrit.bean.Customer"*/-->
     <input name="customerId" th:value="${customer.customerId()}"/>
     <input name="customerName" th:value="${customer.name()}"/>
