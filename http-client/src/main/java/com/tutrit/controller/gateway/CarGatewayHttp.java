@@ -1,17 +1,16 @@
 package com.tutrit.controller.gateway;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Car;
 import com.tutrit.gateway.CarGateway;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.Duration;
 import java.util.Optional;
-
-import static java.time.temporal.ChronoUnit.SECONDS;
 
 public class CarGatewayHttp implements CarGateway {
 
@@ -22,7 +21,7 @@ public class CarGatewayHttp implements CarGateway {
                 .build();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(String.format("http://localhost:8080/cars/%s", car.carId())))
+                .uri(URI.create("http://localhost:8080"))
                 .header("carId", car.carId())
                 .header("owner", car.owner())
                 .header("vin", car.vin())
@@ -35,13 +34,13 @@ public class CarGatewayHttp implements CarGateway {
                 .header("year", String.valueOf(car.year()))
                 .header("save", "save")
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString("{}"))
+                .POST(HttpRequest.BodyPublishers.noBody())
                 .build();
 
         try {
             httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
         return Optional.empty();
     }
@@ -53,23 +52,27 @@ public class CarGatewayHttp implements CarGateway {
                 .build();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .timeout(Duration.of(5, SECONDS))
                 .GET()
-                .uri(URI.create(String.format("http://localhost:8080/cars/%s", id)))
+                .uri(URI.create("http://localhost:8080"))
                 .build();
 
         HttpResponse<String> response = null;
-
-        Car car;
         try {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            car = objectMapper.readValue(response.body(), Car.class);
-        } catch (Exception e) {
+        Car car = null;
+        try {
+            if (response != null) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                car = objectMapper.readValue(response.body(), Car.class);
+            }
+        } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Exception");
-        return Optional.of(car);
+
+        return Optional.ofNullable(car);
     }
 }
