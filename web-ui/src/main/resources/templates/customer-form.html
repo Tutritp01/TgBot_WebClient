@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<form method="post">
-    <!--/*@thymesVar id="error" type="java.lang.String"*/-->
-    <h1 th:if="${error}!=null" th:text="${error}"></h1>
+<!--/*@thymesVar id="error" type="java.lang.String"*/-->
+<h1 th:if="${error}!=null" th:text="${error}"></h1>
+<form action="/customers" method="post">
     <!--/*@thymesVar id="customer" type="com.tutrit.bean.Customer"*/-->
-    <input name="customerId" th:value="${customer.customerId()}"/>
-    <input name="customerName" th:value="${customer.name()}"/>
-    <input name="customerCity" th:value="${customer.city()}"/>
-    <input name="customerPhoneNumber" th:value="${customer.phoneNumber()}"/>
-    <input name="customerEmail" th:value="${customer.email()}"/>
+    <input name="customerId" th:value="${customer.customerId()}"/><br><br>
+    <input name="name" th:value="${customer.name()}"/><br><br>
+    <input name="city" th:value="${customer.city()}"/><br><br>
+    <input name="phoneNumber" th:value="${customer.phoneNumber()}"/><br><br>
+    <input name="email" th:value="${customer.email()}"/><br><br>
     <button name="save" type="submit">save</button>
     <button name="delete" type="submit">delete</button>
 </form>
