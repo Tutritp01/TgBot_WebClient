@@ -1,0 +1,14 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="errors" th:if="${errors != null}">
+    <!--/*@thymesVar id="errors" type="java.util.ArrayList"*/-->
+    <div class="alert" th:if="${errors.size() > 0}">
+        <th:block th:each="error : ${errors}">
+            <h1 th:text="${error}"></h1>
+        </th:block>
+    </div>
+</th:block>
+<script>
+    $(".alert").delay(4000).slideUp(200, function() {
+        $(this).alert('close');
+    });
+</script>

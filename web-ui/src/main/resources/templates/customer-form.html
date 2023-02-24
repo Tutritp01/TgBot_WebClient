@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<form method="post">
+    <!--/*@thymesVar id="customer" type="com.tutrit.bean.Customer"*/-->
+    <input name="customerId" th:value="${customer.customerId()}"/>
+    <input name="customerName" th:value="${customer.name()}"/>
+    <input name="customerCity" th:value="${customer.city()}"/>
+    <input name="customerPhoneNumber" th:value="${customer.phoneNumber()}"/>
+    <input name="customerEmail" th:value="${customer.email()}"/>
+    <button name="save" type="submit">save</button>
+    <button name="delete" type="submit">delete</button>
+</form>
+
+<th:block th:insert="errors.html :: errors"></th:block>
+
