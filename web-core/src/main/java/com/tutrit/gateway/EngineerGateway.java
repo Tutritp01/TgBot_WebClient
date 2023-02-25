@@ -2,11 +2,12 @@ package com.tutrit.gateway;
 
 import com.tutrit.bean.Engineer;
 
+import java.util.Optional;
+
 public interface EngineerGateway {
     Engineer saveEngineer(Engineer engineer);
-    Engineer findEngineerById(String id);
-    Iterable<Engineer> findAllEngineer();
-    Engineer update(String id);
-    boolean deleteEngineer(Engineer engineer);
+
+    Optional<Engineer> findEngineerById(String id);
+
     boolean deleteEngineerById(String id);
 }

@@ -1,11 +1,11 @@
-package com.tutrit.config;
+package com.tutrit.webclient.config;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-public class MySpringContext {
+public class SpringContextConfig {
     @Configuration
     @SpringBootConfiguration
     @EnableAutoConfiguration
