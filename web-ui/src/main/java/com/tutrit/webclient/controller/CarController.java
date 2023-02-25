@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 
 @Controller
 @RequestMapping("/cars")
@@ -22,8 +21,9 @@ public class CarController {
     public ModelAndView findCarById(@PathVariable String id) {
         var mov = new ModelAndView();
         carGateway.findCarById(id)
-                .ifPresentOrElse(addCarToModel(mov),
-                        addEmptyCar(mov));
+                .ifPresentOrElse(
+                        car -> mov.addObject("car", car),
+                        () -> mov.addObject("car", CarBuilder.builder().build()));
         mov.setViewName("car-form");
         return mov;
     }
@@ -40,30 +40,13 @@ public class CarController {
                           @RequestParam String modification,
                           @RequestParam String engine,
                           @RequestParam Integer year,
-                          @RequestParam Optional<String> save) {
-        Car car = CarBuilder.builder()
-                .carId(carId)
-                .owner(owner)
-                .vin(vin)
-                .plateNumber(plateNumber)
-                .brand(brand)
-                .model(model)
-                .generation(generation)
-                .modification(modification)
-                .engine(engine)
-                .year(year)
-                .build();
+                          @RequestParam Optional<String> save,
+                          @RequestParam Optional<String> delete) {
+        var car = new Car(carId, owner, vin, plateNumber, brand, model, generation, modification, engine, year);
 
-        save.ifPresentOrElse(i -> carGateway.saveCar(car), addEmptyCar(new ModelAndView()));
+        save.ifPresent(i -> carGateway.saveCar(car));
+        delete.ifPresent(i -> carGateway.deleteCarById(carId));
         return "redirect:/cars/" + id;
     }
 
-
-    private Runnable addEmptyCar(ModelAndView mov) {
-        return () -> mov.addObject("car", new Car(null, null, null, null, null, null, null, null, null, null));
-    }
-
-    private Consumer<Car> addCarToModel(ModelAndView mov) {
-        return c -> mov.addObject("car", c);
-    }
 }
