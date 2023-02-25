@@ -11,5 +11,5 @@ public interface CustomerGateway {
 
     boolean deleteCustomerById(String customerId);
 
-    Optional<Customer> updateCustomer(String customerId);
+    Optional<Customer> updateCustomer(Customer customerId);
 }
