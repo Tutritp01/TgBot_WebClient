@@ -80,7 +80,7 @@ public class HttpCustomerGateway implements CustomerGateway {
     }
 
     @Override
-    public Optional<Customer> updateCustomer(String customerId) {
+    public Optional<Customer> updateCustomer(Customer customerId) {
         return Optional.empty();
     }
 
