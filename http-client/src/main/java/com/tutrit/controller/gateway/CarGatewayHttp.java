@@ -65,7 +65,7 @@ public class CarGatewayHttp implements CarGateway {
 
         Car car = null;
         try {
-            if (response != null) {
+            if (response.request().bodyPublisher().isPresent()) {
                 ObjectMapper objectMapper = new ObjectMapper();
                 car = objectMapper.readValue(response.body(), Car.class);
             }

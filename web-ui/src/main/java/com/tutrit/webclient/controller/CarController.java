@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 @RequestMapping("/cars")
 public class CarController {
 
-    //    @Autowired(required = false)
+//    @Autowired
     private CarGateway carGateway = new CarGatewayHttp();
 
     @GetMapping("/{id}")
