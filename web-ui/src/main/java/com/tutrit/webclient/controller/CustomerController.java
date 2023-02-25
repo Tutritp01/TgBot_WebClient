@@ -56,21 +56,18 @@ public class CustomerController {
     }
 
     @PostMapping("/customers/{id}")
-    public String saveCustomer(@PathVariable String id,
-                               @RequestParam String customerId,
-                               @RequestParam String name,
-                               @RequestParam String city,
-                               @RequestParam String phoneNumber,
-                               @RequestParam String email,
-                               @RequestParam Optional<String> save,
-                               @RequestParam Optional<String> delete) {
+    public String updateCustomer(@PathVariable String id,
+                                 @RequestParam String customerId,
+                                 @RequestParam String name,
+                                 @RequestParam String city,
+                                 @RequestParam String phoneNumber,
+                                 @RequestParam String email,
+                                 @RequestParam Optional<String> update) {
         var customer = new Customer(customerId, name, city, phoneNumber, email);
 
-        save.ifPresent(i -> {
-
-            customerGateway.saveCustomer(customer);
+        update.ifPresent(i -> {
+            customerGateway.updateCustomer(customer);
         });
-        delete.ifPresent(i -> customerGateway.deleteCustomerById(customerId));
 
         return "redirect:/customers/" + id;
     }
