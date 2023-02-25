@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -35,16 +36,16 @@ class CarControllerTest {
 
     @Test
     void findCarById() throws Exception {
-        when(carGateway.findCarById("id1")).thenReturn(makeCar());
+        when(carGateway.findCarById("id1")).thenReturn(Optional.of(makeCar()));
 
         final MvcResult result = mockMvc.perform(get("/cars/id1"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("car", Matchers.equalTo(makeCar().get())))
+                .andExpect(model().attribute("car", Matchers.equalTo(makeCar())))
                 .andExpect(view().name("car-form"))
                 .andReturn();
 
         Car actualCar = (Car) Objects.requireNonNull(result.getModelAndView()).getModel().get("car");
-        assertEquals(makeCar().get(), actualCar);
+        assertEquals(makeCar(), actualCar);
     }
 
     @Test
@@ -68,11 +69,31 @@ class CarControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
 
-        Mockito.verify(carGateway).saveCar(makeCar().get());
+        Mockito.verify(carGateway).saveCar(makeCar());
     }
 
-    private Optional<Car> makeCar() {
-        Optional<Car> car = Optional.of(new Car("id1", "owner1", "vin1", "plateNumber1", "brand1", "model1", "1g", "mod1", "engine1", 2001));
-        return car;
+    @Test
+    void deleteCar() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/cars/id1")
+                        .param("carId", "id1")
+                        .param("owner", "owner1")
+                        .param("vin", "vin1")
+                        .param("plateNumber", "plateNumber1")
+                        .param("brand", "brand1")
+                        .param("model", "model1")
+                        .param("generation", "1g")
+                        .param("modification", "mod1")
+                        .param("engine", "engine1")
+                        .param("year", "2001")
+                        .param("delete", "push"))
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/cars/id1"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+        Mockito.verify(carGateway).deleteCarById("id1");
+    }
+
+    private Car makeCar() {
+        return new Car("id1", "owner1", "vin1", "plateNumber1", "brand1", "model1", "1g", "mod1", "engine1", 2001);
     }
 }
