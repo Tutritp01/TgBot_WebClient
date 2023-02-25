@@ -21,8 +21,8 @@ public class UserGatewayMock {
             }
 
             @Override
-            public Optional<User> saveUser(User user) {
-                return Optional.empty();
+            public User saveUser(User user) {
+                return user;
             }
 
             @Override

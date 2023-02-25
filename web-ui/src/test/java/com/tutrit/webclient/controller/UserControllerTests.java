@@ -46,7 +46,7 @@ class UserControllerTests {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(model().attribute("user", Matchers.equalTo(createUser())))
-                .andExpect(view().name("user-form.html"))
+                .andExpect(view().name("user-form"))
                 .andReturn();
         User actualUser = (User) Objects.requireNonNull(result.getModelAndView()).getModel().get("user");
         assertEquals(createUser(), actualUser);
@@ -60,7 +60,7 @@ class UserControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(model().attribute("user", Matchers.equalTo(userHasNullOfFields())))
                 .andExpect(model().attribute("error_404", Matchers.equalTo("User not found")))
-                .andExpect(view().name("user-form.html"))
+                .andExpect(view().name("user-form"))
                 .andReturn();
         User actualUser = (User) Objects.requireNonNull(mvcResult.getModelAndView()).getModel().get("user");
         assertEquals(userHasNullOfFields(), actualUser);
@@ -68,10 +68,11 @@ class UserControllerTests {
 
     @Test
     void saveUser() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/users/1?" +
-                                "userId=1" +
-                                "&name=FreddyMercury" +
-                                "&phoneNumber=+37525987")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+                        .post("/users/1")
+                        .param("userId","1")
+                        .param("name","FreddyMercury")
+                        .param("phoneNumber","+37525987")
                         .param("save", "push"))
                 .andExpect(view().name("redirect:/users/1"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
@@ -82,10 +83,11 @@ class UserControllerTests {
 
     @Test
     void deleteUser() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/users/1?" +
-                                "userId=1" +
-                                "&name=FreddyMercury" +
-                                "&phoneNumber=+37525987")
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/users/1")
+                        .param("userId","1")
+                        .param("name","FreddyMercury")
+                        .param("phoneNumber","+37525987")
                         .param("delete", "push"))
                 .andExpect(view().name("redirect:/users/1"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())

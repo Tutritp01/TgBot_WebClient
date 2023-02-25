@@ -7,7 +7,7 @@ import java.util.Optional;
 public interface UserGateway {
     Optional<User> findUserById(String userId);
 
-    Optional<User> saveUser(User user);
+    User saveUser(User user);
 
     boolean deleteUserById(String userId);
 }

@@ -27,7 +27,7 @@ public class UserController {
                     mov.addObject("user", new User(null, null, null));
                     mov.addObject("error_404", "User not found");
                 });
-        mov.setViewName("user-form.html");
+        mov.setViewName("user-form");
         return mov;
     }
 
