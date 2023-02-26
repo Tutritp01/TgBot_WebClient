@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Component
 public class CarGatewayHttp implements CarGateway {
-    private static final String LOCALHOST_8080 = "http://localhost:8080";
+    private static final String REQUEST_URI = "http://3.124.0.23:8082/cars/";
 
     private static final HttpClient httpClient = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_2)
@@ -26,20 +26,24 @@ public class CarGatewayHttp implements CarGateway {
     public Car saveCar(Car car) {
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(LOCALHOST_8080))
-                .header("carId", car.carId())
-                .header("owner", car.owner())
-                .header("vin", car.vin())
-                .header("plateNumber", car.plateNumber())
-                .header("brand", car.brand())
-                .header("model", car.model())
-                .header("generation", car.generation())
-                .header("modification", car.modification())
-                .header("engine", car.engine())
-                .header("year", String.valueOf(car.year()))
-                .header("save", "save")
+                .uri(URI.create(REQUEST_URI))
+                .POST(HttpRequest.BodyPublishers
+                        .ofString(String.format(
+                                "{\"carId\": \"%s\", \"owner\": \"%s\", \"vin\": \"%s\", " +
+                                        "\"plateNumber\": \"%s\", \"brand\": \"%s\", \"model\": \"%s\", " +
+                                        "\"generation\": \"%s\", \"modification\": \"%s\", \"engine\": \"%s\", " +
+                                        "\"year\": %s }",
+                                car.carId(),
+                                car.owner(),
+                                car.vin(),
+                                car.plateNumber(),
+                                car.brand(),
+                                car.model(),
+                                car.generation(),
+                                car.modification(),
+                                car.engine(),
+                                car.year())))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.noBody())
                 .build();
 
         try {
@@ -55,7 +59,7 @@ public class CarGatewayHttp implements CarGateway {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create(LOCALHOST_8080))
+                .uri(URI.create(REQUEST_URI + id))
                 .build();
 
         HttpResponse<String> response = null;
@@ -74,7 +78,6 @@ public class CarGatewayHttp implements CarGateway {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-
         return Optional.ofNullable(car);
     }
 
@@ -82,10 +85,7 @@ public class CarGatewayHttp implements CarGateway {
     public boolean deleteCarById(String id) {
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(LOCALHOST_8080))
-                .header("carId", id)
-                .header("delete", "delete")
-                .header("Content-Type", "application/json")
+                .uri(URI.create(REQUEST_URI + id))
                 .POST(HttpRequest.BodyPublishers.noBody())
                 .build();
 
