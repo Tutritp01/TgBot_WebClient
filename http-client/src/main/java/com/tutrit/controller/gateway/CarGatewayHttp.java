@@ -27,22 +27,7 @@ public class CarGatewayHttp implements CarGateway {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(REQUEST_URI))
-                .POST(HttpRequest.BodyPublishers
-                        .ofString(String.format(
-                                "{\"carId\": \"%s\", \"owner\": \"%s\", \"vin\": \"%s\", " +
-                                        "\"plateNumber\": \"%s\", \"brand\": \"%s\", \"model\": \"%s\", " +
-                                        "\"generation\": \"%s\", \"modification\": \"%s\", \"engine\": \"%s\", " +
-                                        "\"year\": %s }",
-                                car.carId(),
-                                car.owner(),
-                                car.vin(),
-                                car.plateNumber(),
-                                car.brand(),
-                                car.model(),
-                                car.generation(),
-                                car.modification(),
-                                car.engine(),
-                                car.year())))
+                .POST(HttpRequest.BodyPublishers.ofString(setBody(car)))
                 .header("Content-Type", "application/json")
                 .build();
 
@@ -95,5 +80,23 @@ public class CarGatewayHttp implements CarGateway {
             Thread.currentThread().interrupt();
         }
         return false;
+    }
+
+    private static String setBody(Car car) {
+        return String.format(
+                "{\"carId\": \"%s\", \"owner\": \"%s\", \"vin\": \"%s\", " +
+                        "\"plateNumber\": \"%s\", \"brand\": \"%s\", \"model\": \"%s\", " +
+                        "\"generation\": \"%s\", \"modification\": \"%s\", \"engine\": \"%s\", " +
+                        "\"year\": %s }",
+                car.carId(),
+                car.owner(),
+                car.vin(),
+                car.plateNumber(),
+                car.brand(),
+                car.model(),
+                car.generation(),
+                car.modification(),
+                car.engine(),
+                car.year());
     }
 }
