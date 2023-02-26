@@ -1,6 +1,5 @@
 package com.tutrit.webclient.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Engineer;
 import com.tutrit.gateway.EngineerGateway;
 import com.tutrit.webclient.config.SpringContextConfig;
@@ -68,7 +67,6 @@ class EngineerControllerTest {
         final MvcResult mvcResult = mockMvc
                 .perform(MockMvcRequestBuilders
                         .post("/engineers/52?")
-                        .param("engineerId", "52")
                         .param("engineerId", "52")
                         .param("firstName", "firstName1")
                         .param("lastName", "lastName1")
