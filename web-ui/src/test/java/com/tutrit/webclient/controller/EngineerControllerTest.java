@@ -33,8 +33,7 @@ class EngineerControllerTest {
     EngineerGateway engineerGateway;
     @Autowired
     MockMvc mockMvc;
-    @Autowired
-    ObjectMapper objectMapper;
+
 
     @Test
     void findEngineerById() throws Exception {
@@ -67,15 +66,17 @@ class EngineerControllerTest {
     @Test
     void saveEngineer() throws Exception {
         final MvcResult mvcResult = mockMvc
-                .perform(MockMvcRequestBuilders.post("/engineers/52?" +
-                                "engineerId=52" +
-                                "&firstName=firstName1" +
-                                "&lastName=lastName1" +
-                                "&function=function1" +
-                                "&category=category1" +
-                                "&education=education1" +
-                                "&experience=3" +
-                                "&generalExperience=10")
+                .perform(MockMvcRequestBuilders
+                        .post("/engineers/52?")
+                        .param("engineerId", "52")
+                        .param("engineerId", "52")
+                        .param("firstName", "firstName1")
+                        .param("lastName", "lastName1")
+                        .param("function", "function1")
+                        .param("category", "category1")
+                        .param("education", "education1")
+                        .param("experience", "3")
+                        .param("generalExperience", "10")
                         .param("save", "push"))
                 .andExpect(view().name("redirect:/engineers/52"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
