@@ -2,7 +2,7 @@ package com.tutrit.webclient.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.User;
-import com.tutrit.webclient.config.SpringContextConfig;
+import com.tutrit.webclient.config.SpringContext;
 import com.tutrit.gateway.UserGateway;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @AutoConfigureMockMvc
-@SpringBootTest(classes = SpringContextConfig.SpringConfig.class)
+@SpringBootTest(classes = SpringContext.SpringConfig.class)
 class UserControllerTests {
     @MockBean
     UserGateway userGateway;
