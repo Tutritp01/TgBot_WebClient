@@ -66,7 +66,7 @@ class EngineerControllerTest {
     void saveEngineer() throws Exception {
         final MvcResult mvcResult = mockMvc
                 .perform(MockMvcRequestBuilders
-                        .post("/engineers/52?")
+                        .post("/engineers/52")
                         .param("engineerId", "52")
                         .param("firstName", "firstName1")
                         .param("lastName", "lastName1")
