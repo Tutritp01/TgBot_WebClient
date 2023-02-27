@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Customer;
 import com.tutrit.gateway.CustomerGateway;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Optional;
 
+@Qualifier
 @Component
 public class HttpCustomerGateway implements CustomerGateway {
     @Override
@@ -51,7 +53,7 @@ public class HttpCustomerGateway implements CustomerGateway {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create("http://localhost:8080/customersDataBase")) //endpoint to find customer
+                .uri(URI.create("http://localhost:8080/customersDataBase/customerId")) //endpoint to find customer
                 .build();
 
         HttpResponse<String> response = null;
