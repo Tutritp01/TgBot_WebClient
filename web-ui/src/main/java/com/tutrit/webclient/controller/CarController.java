@@ -4,14 +4,12 @@ import com.tutrit.bean.Car;
 import com.tutrit.bean.CarBuilder;
 import com.tutrit.gateway.CarGateway;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
 
-@SpringBootApplication(scanBasePackages = "com.tutrit")
 @Controller
 @RequestMapping("/cars")
 public class CarController {
