@@ -8,8 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = "com.tutrit")
 public class WebClientApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(WebClientApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(WebClientApplication.class, args);
+    }
 }
