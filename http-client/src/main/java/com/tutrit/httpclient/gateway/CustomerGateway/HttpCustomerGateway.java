@@ -18,19 +18,19 @@ import java.util.Optional;
 @Qualifier
 @Component
 public class HttpCustomerGateway implements CustomerGateway {
-    @Override
-    public Customer saveCustomer(Customer customer){
+    private static final HttpClient httpClient = HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_2)
+            .build();
 
-        HttpClient httpClient = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_2)
-                .build();
+    @Override
+    public Customer saveCustomer(Customer customer) {
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/customersData")) //endpoint to transfer data
+                .uri(URI.create("http://3.124.0.23:8082/customers"))
                 .POST(HttpRequest.BodyPublishers
                         .ofString(String.format(
                                 "{\"customerId\":\"%s\"\"name\":\"%s\",\"city\":\"%s\",\"phoneNumber\":\"%s\",\"email\":\"%s\"}",
-                                customer.customerId(),customer.name(),customer.city(),customer.phoneNumber(),customer.email())))
+                                customer.customerId(), customer.name(), customer.city(), customer.phoneNumber(), customer.email())))
                 .header("Content-Type", "application/json")
                 .build();
 
@@ -47,14 +47,11 @@ public class HttpCustomerGateway implements CustomerGateway {
     }
 
     @Override
-    public Optional<Customer> findCustomerById(String customerId){
-        HttpClient httpClient = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_2)
-                .build();
+    public Optional<Customer> findCustomerById(String customerId) {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create("http://localhost:8080/customersDataBase/customerId")) //endpoint to find customer
+                .uri(URI.create("http://3.124.0.23:8082/customers/customerId}"))
                 .build();
 
         HttpResponse<String> response = null;
@@ -83,11 +80,9 @@ public class HttpCustomerGateway implements CustomerGateway {
     }
 
     @Override
-    public Optional<Customer> updateCustomer(Customer customerId) {
+    public Optional<Customer> updateCustomer(Customer customer) {
         return Optional.empty();
     }
-
-
 }
 
 
