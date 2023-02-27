@@ -20,6 +20,7 @@ import java.util.Optional;
 public class HttpCustomerGateway implements CustomerGateway {
     @Override
     public Customer saveCustomer(Customer customer){
+
         HttpClient httpClient = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2)
                 .build();

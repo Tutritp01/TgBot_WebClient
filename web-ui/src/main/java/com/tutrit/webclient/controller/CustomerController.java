@@ -2,14 +2,17 @@ package com.tutrit.webclient.controller;
 
 import com.tutrit.bean.Customer;
 import com.tutrit.gateway.CustomerGateway;
-import com.tutrit.httpclient.gateway.CustomerGateway.HttpCustomerGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @SpringBootApplication(scanBasePackages = "com.tutrit")
 @Controller
@@ -27,24 +30,23 @@ public class CustomerController {
     }
 
     @PostMapping("/customers")
-    public String actionsOnTheCustomer(@RequestParam String customerId,
-                                       @RequestParam String name,
-                                       @RequestParam String city,
-                                       @RequestParam String phoneNumber,
-                                       @RequestParam String email,
-                                       @RequestParam Optional<String> save,
-                                       @RequestParam Optional<String> delete,
-                                       @RequestParam Optional<String> update) {
-        var customer = new Customer(customerId, name, city, phoneNumber, email);
+    public String createNewCustomer(@RequestParam String customerId,
+                                    @RequestParam String name,
+                                    @RequestParam String city,
+                                    @RequestParam String phoneNumber,
+                                    @RequestParam String email,
+                                    @RequestParam Optional<String> save,
+                                    @RequestParam Optional<String> delete,
+                                    @RequestParam Optional<String> update) {
 
         save.ifPresent(i -> {
-            customerGateway.saveCustomer(customer);
+            saveCustomer(String.valueOf(UUID.randomUUID()), name, city, phoneNumber, email, customerId);
         });
         delete.ifPresent(i -> {
             customerGateway.deleteCustomerById(customerId);
         });
         update.ifPresent(i -> {
-            customerGateway.updateCustomer(customer);
+            updateCustomer(customerId,name,phoneNumber,email,city);
         });
         return "redirect:/customers";
     }
@@ -64,4 +66,30 @@ public class CustomerController {
         return mov;
     }
 
+    @PostMapping("/customers/{id}")
+    public String saveCustomer(@PathVariable String id,
+                               @RequestParam String customerId,
+                               @RequestParam String name,
+                               @RequestParam String city,
+                               @RequestParam String phoneNumber,
+                               @RequestParam String email) {
+        var customer = new Customer(customerId, name, city, phoneNumber, email);
+
+        customerGateway.saveCustomer(customer);
+
+        return "redirect:/customers/" + id;
+    }
+
+    @PostMapping("/customers/{customerId}")
+    public String updateCustomer(@PathVariable String customerId,
+                                 @RequestParam String name,
+                                 @RequestParam String city,
+                                 @RequestParam String phoneNumber,
+                                 @RequestParam String email) {
+        var customer = new Customer(customerId, name, city, phoneNumber, email);
+
+        customerGateway.updateCustomer(customer);
+
+        return "redirect:/customers/";
+    }
 }
