@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.User;
 import com.tutrit.gateway.UserGateway;
+import com.tutrit.httpclient.config.WebClientUrlConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +22,9 @@ import static java.net.http.HttpClient.Version.HTTP_2;
 public class HttpUserGateway implements UserGateway {
     @Autowired
     private ObjectMapper objectMapper;
-    public static final String GENERAL_URI = "http://localhost:8080";
+    @Autowired
+    private WebClientUrlConfig webClientUrlConfig;
+
     private final HttpClient httpClient = HttpClient.newBuilder().version(HTTP_2).build();
 
     @Override
@@ -29,7 +32,7 @@ public class HttpUserGateway implements UserGateway {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create(GENERAL_URI))
+                .uri(URI.create(webClientUrlConfig.getUrl()))
                 .build();
 
         HttpResponse<String> response = null;
@@ -53,7 +56,7 @@ public class HttpUserGateway implements UserGateway {
     @Override
     public User saveUser(User user) {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(GENERAL_URI + user.userId()))
+                .uri(URI.create(webClientUrlConfig.getUrl() + user.userId()))
                 .POST(createUserBodyPublisher(user))
                 .header("Content-Type", "application/json")
                 .build();
