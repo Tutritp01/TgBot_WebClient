@@ -17,6 +17,14 @@ public class UserController {
     @Autowired
     private UserGateway userGateway;
 
+    @GetMapping("/users")
+    public ModelAndView emptyForm() {
+        var mov = new ModelAndView();
+        mov.addObject("user", new User(null, null, null));
+        mov.setViewName("user-form");
+        return mov;
+    }
+
     @GetMapping("/users/{userId}")
     public ModelAndView findUserById(@PathVariable String userId) {
         var mov = new ModelAndView();

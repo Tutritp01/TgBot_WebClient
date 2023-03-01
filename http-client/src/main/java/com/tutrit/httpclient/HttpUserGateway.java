@@ -6,6 +6,7 @@ import com.tutrit.bean.User;
 import com.tutrit.gateway.UserGateway;
 import com.tutrit.httpclient.config.WebClientUrlConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -17,7 +18,7 @@ import java.util.Optional;
 
 import static java.net.http.HttpClient.Version.HTTP_2;
 
-
+@Qualifier
 @Component
 public class HttpUserGateway implements UserGateway {
     @Autowired
@@ -32,7 +33,7 @@ public class HttpUserGateway implements UserGateway {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create(webClientUrlConfig.getUrl()))
+                .uri(URI.create(webClientUrlConfig.getUrl() + userId))
                 .build();
 
         HttpResponse<String> response = null;
@@ -40,14 +41,15 @@ public class HttpUserGateway implements UserGateway {
         try {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
         }
 
+        assert response != null;
         if (response.request().bodyPublisher().isPresent()) {
             try {
                 user = objectMapper.readValue(response.body(), User.class);
             } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
         return Optional.ofNullable(user);
@@ -64,15 +66,33 @@ public class HttpUserGateway implements UserGateway {
         try {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
         }
         System.out.println(response.statusCode());
-        return null;
+
+        return user;
     }
 
 
     @Override
     public boolean deleteUserById(String userId) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(webClientUrlConfig.getUrl() + userId))
+                .DELETE()
+                .build();
+        HttpResponse<String> response = null;
+        try {
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+
+        if (response != null) {
+            System.out.println(response.statusCode());
+            return true;
+        }
+
         return false;
     }
 
