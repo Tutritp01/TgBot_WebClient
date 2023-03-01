@@ -1,7 +1,7 @@
 package com.tutrit.webclient.controller;
 
 import com.tutrit.bean.Car;
-import com.tutrit.config.SpringContext;
+import com.tutrit.webclient.config.SpringContext;
 import com.tutrit.gateway.CarGateway;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
