@@ -23,7 +23,7 @@ class HttpCustomerGatewayTest {
 
     @Test
     void saveCustomer() {
-        when(endpointConfig.getRestApiUrl()).thenReturn("http://localhost:8080/customers");
+        when(endpointConfig.getRestApiUrl()).thenReturn("http://localhost:8090/customers");
         RuntimeException thrown = assertThrows(
                 RuntimeException.class,
                 () -> customerGateway.saveCustomer(createCustomer())
@@ -33,7 +33,7 @@ class HttpCustomerGatewayTest {
 
     @Test
     void findCustomerById() {
-        when(endpointConfig.getRestApiUrl()).thenReturn("http://localhost:8080/customers");
+        when(endpointConfig.getRestApiUrl()).thenReturn("http://localhost:8090/customers");
         RuntimeException thrown = assertThrows(
                 RuntimeException.class,
                 () -> customerGateway.findCustomerById("12")
