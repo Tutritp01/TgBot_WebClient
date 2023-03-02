@@ -2,7 +2,8 @@ package com.tutrit.webclient.controller;
 
 import com.tutrit.bean.Engineer;
 import com.tutrit.gateway.EngineerGateway;
-import com.tutrit.webclient.config.SpringContextConfig;
+
+import com.tutrit.webclient.config.SpringContext;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -25,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
-@SpringBootTest(classes = SpringContextConfig.SpringConfig.class)
+@SpringBootTest(classes = SpringContext.SpringConfig.class)
 class EngineerControllerTest {
 
     @MockBean
