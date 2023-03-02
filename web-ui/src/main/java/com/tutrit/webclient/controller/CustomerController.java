@@ -39,7 +39,7 @@ public class CustomerController {
         save.ifPresent(i -> customerGateway.saveCustomer(customer));
         delete.ifPresent(i -> customerGateway.deleteCustomerById(customerId));
 
-        return "redirect:/customers/" + id;
+        return "redirect:/customers";
     }
 
     @GetMapping("/customers/{customerId}")
