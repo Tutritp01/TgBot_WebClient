@@ -20,12 +20,9 @@ import java.util.Optional;
 @Qualifier
 @Component
 public class HttpCustomerGateway implements CustomerGateway {
-
-    private final EndpointConfig endpointConfig;
     @Autowired
-    public HttpCustomerGateway(EndpointConfig endpointConfig) {
-        this.endpointConfig = endpointConfig;
-    }
+    private EndpointConfig endpointConfig;
+
 
     private static final HttpClient httpClient = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_2)
