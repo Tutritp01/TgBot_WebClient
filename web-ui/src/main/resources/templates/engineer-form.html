@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="engineer" type="com.tutrit.bean.Engineer"*/-->
+<h1 th:if="${error_404}!=null" th:text="${error_404}"></h1>
+<form method="post">
+    <!--/*@thymesVar id="engineer" type="com.tutrit.bean.Engineer"*/-->
+    <input name="engineerId" th:value="${engineer.engineerId()}"/>
+    <br>
+    <input name="firstName" th:value="${engineer.firstName()}"/>
+    <br>
+    <input name="lastName" th:value="${engineer.lastName()}"/>
+    <br>
+    <input name="function" th:value="${engineer.function()}"/>
+    <br>
+    <input name="category" th:value="${engineer.category()}"/>
+    <br>
+    <input name="education" th:value="${engineer.education()}"/>
+    <br>
+    <input name="experience" th:value="${engineer.experience()}"/>
+    <br>
+    <input name="generalExperience" th:value="${engineer.generalExperience()}"/>
+    <br>
+    <button type="submit" name="save">save</button>
+    <br>
+    <button type="submit" name="delete">delete</button>
+    <br>
+</form>
+
