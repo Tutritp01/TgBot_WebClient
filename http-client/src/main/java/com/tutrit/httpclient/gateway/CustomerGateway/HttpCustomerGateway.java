@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Customer;
 import com.tutrit.gateway.CustomerGateway;
+import com.tutrit.httpclient.gateway.config.EndpointConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,13 @@ import java.util.Optional;
 @Qualifier
 @Component
 public class HttpCustomerGateway implements CustomerGateway {
+
+    private final EndpointConfig endpointConfig;
+    @Autowired
+    public HttpCustomerGateway(EndpointConfig endpointConfig) {
+        this.endpointConfig = endpointConfig;
+    }
+
     private static final HttpClient httpClient = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_2)
             .build();
@@ -26,7 +35,7 @@ public class HttpCustomerGateway implements CustomerGateway {
     public Customer saveCustomer(Customer customer) {
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://3.124.0.23:8082/customers"))
+                .uri(URI.create(endpointConfig.getRestApiUrl()))
                 .POST(HttpRequest.BodyPublishers
                         .ofString(String.format(
                                 "{\"customerId\":\"%s\"\"name\":\"%s\",\"city\":\"%s\",\"phoneNumber\":\"%s\",\"email\":\"%s\"}",
@@ -51,7 +60,7 @@ public class HttpCustomerGateway implements CustomerGateway {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create("http://3.124.0.23:8082/customers/customerId}"))
+                .uri(URI.create(endpointConfig.getRestApiUrl() + customerId))
                 .build();
 
         HttpResponse<String> response = null;
@@ -70,7 +79,6 @@ public class HttpCustomerGateway implements CustomerGateway {
                 throw new RuntimeException(e);
             }
         }
-
         return Optional.ofNullable(customer);
     }
 
