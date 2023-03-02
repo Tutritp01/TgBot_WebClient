@@ -1,48 +1,52 @@
 package com.tutrit.httpclient.gateway.CustomerGateway;
 
+import com.tutrit.bean.Customer;
+import com.tutrit.gateway.CustomerGateway;
+import com.tutrit.httpclient.gateway.config.EndpointConfig;
+import com.tutrit.httpclient.gateway.config.SpringContext;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
-import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest(classes = SpringContext.SpringConfig.class)
 class HttpCustomerGatewayTest {
+    @Autowired
+    CustomerGateway customerGateway;
+    @MockBean
+    EndpointConfig endpointConfig;
 
     @Test
     void saveCustomer() {
-
-    }
-
-    /* data as form*/
-    Map<String, String> formData = new HashMap<>();
-//        formData.put("name", "");
-//        formData.put("customerId", "");
-//        formData.put("city", "null");
-//        formData.put("phoneNumber", "");
-//        formData.put("email", "");
-
-/*create JSON of form*/
-    private static String getFormDataAsString(Map<String, String> formData) {
-        StringBuilder formBodyBuilder = new StringBuilder();
-        for (Map.Entry<String, String> singleEntry : formData.entrySet()) {
-            if (formBodyBuilder.length() > 0) {
-                formBodyBuilder.append("&");
-            }
-            formBodyBuilder.append(URLEncoder.encode(singleEntry.getKey(), StandardCharsets.UTF_8));
-            formBodyBuilder.append("=");
-            formBodyBuilder.append(URLEncoder.encode(singleEntry.getValue(), StandardCharsets.UTF_8));
-        }
-        return formBodyBuilder.toString();
+        when(endpointConfig.getRestApiUrl()).thenReturn("http://localhost:8080/customers");
+        RuntimeException thrown = assertThrows(
+                RuntimeException.class,
+                () -> customerGateway.saveCustomer(createCustomer())
+        );
+        assertTrue(thrown.getMessage().contentEquals("java.net.ConnectException"));
     }
 
     @Test
     void findCustomerById() {
+        when(endpointConfig.getRestApiUrl()).thenReturn("http://localhost:8080/customers");
+        RuntimeException thrown = assertThrows(
+                RuntimeException.class,
+                () -> customerGateway.findCustomerById("12")
+        );
+        assertTrue(thrown.getMessage().contentEquals("java.net.ConnectException"));
     }
 
     @Test
     void deleteCustomerById() {
     }
+
+    private Customer createCustomer() {
+        return new Customer("23453434", "name", "city", "phoneNumber", "email");
+    }
+
 }
