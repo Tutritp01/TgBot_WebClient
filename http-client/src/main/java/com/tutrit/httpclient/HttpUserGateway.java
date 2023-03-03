@@ -83,22 +83,17 @@ public class HttpUserGateway implements UserGateway {
 
     @Override
     public boolean deleteUserById(String userId) {
+
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(webClientUrl + "/" + userId))
                 .timeout(Duration.of(1, SECONDS))
                 .POST(HttpRequest.BodyPublishers.noBody())
                 .build();
-        HttpResponse<String> response = null;
         try {
-            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+             httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        if (response != null) {
-            System.out.println(response.statusCode());
-            return true;
-        }
-
         return false;
     }
 
