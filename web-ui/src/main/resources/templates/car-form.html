@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form method="post">
+    <!--/*@thymesVar id="car" type="com.tutrit.bean.Car"*/-->
+    <input name="carId" th:value="${car.carId()}"/>
+    <input name="owner" th:value="${car.owner()}"/>
+    <input name="vin" th:value="${car.vin()}"/>
+    <input name="plateNumber" th:value="${car.plateNumber()}"/>
+    <input name="brand" th:value="${car.brand()}"/>
+    <input name="model" th:value="${car.model()}"/>
+    <input name="generation" th:value="${car.generation()}"/>
+    <input name="modification" th:value="${car.modification()}"/>
+    <input name="engine" th:value="${car.engine()}"/>
+    <input name="year" th:value="${car.year()}"/>
+    <button type="submit" name="save">save</button>
+    <button type="submit" name="delete">delete</button>
+</form>

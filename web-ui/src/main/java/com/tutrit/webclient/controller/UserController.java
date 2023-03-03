@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @Controller
 public class UserController {
+
     @Autowired
     private UserGateway userGateway;
 
