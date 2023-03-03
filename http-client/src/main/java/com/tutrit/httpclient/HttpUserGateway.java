@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.User;
 import com.tutrit.gateway.UserGateway;
-import com.tutrit.httpclient.config.WebClientUrlConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -14,38 +14,43 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.Optional;
 
 import static java.net.http.HttpClient.Version.HTTP_2;
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 @Qualifier
 @Component
 public class HttpUserGateway implements UserGateway {
     @Autowired
     private ObjectMapper objectMapper;
-    @Autowired
-    private WebClientUrlConfig webClientUrlConfig;
+    private String webClientUrl;
 
-    private final HttpClient httpClient = HttpClient.newBuilder().version(HTTP_2).build();
+
+    @Autowired
+    public HttpUserGateway(@Value("${endpoint.web-client}") String webClientUrl) {
+        this.webClientUrl = webClientUrl + "/users";
+    }
+
+    private static final HttpClient httpClient = HttpClient.newBuilder().version(HTTP_2).build();
+
 
     @Override
     public Optional<User> findUserById(String userId) {
-
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create(webClientUrlConfig.getUrl() + userId))
+                .uri(URI.create(webClientUrl + "/" + userId))
+                .timeout(Duration.of(1, SECONDS))
                 .build();
-
         HttpResponse<String> response = null;
-        User user = null;
         try {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-
-        assert response != null;
-        if (response.request().bodyPublisher().isPresent()) {
+        User user = null;
+        if (response != null && response.request().bodyPublisher().isPresent()) {
             try {
                 user = objectMapper.readValue(response.body(), User.class);
             } catch (JsonProcessingException e) {
@@ -58,7 +63,8 @@ public class HttpUserGateway implements UserGateway {
     @Override
     public User saveUser(User user) {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(webClientUrlConfig.getUrl() + user.userId()))
+                .uri(URI.create(webClientUrl + "/" + user.userId()))
+                .timeout(Duration.of(1, SECONDS))
                 .POST(createUserBodyPublisher(user))
                 .header("Content-Type", "application/json")
                 .build();
@@ -68,8 +74,9 @@ public class HttpUserGateway implements UserGateway {
         } catch (IOException | InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        System.out.println(response.statusCode());
-
+        if (response != null && response.request().bodyPublisher().isPresent()) {
+            System.out.println(response.statusCode());
+        }
         return user;
     }
 
@@ -77,8 +84,9 @@ public class HttpUserGateway implements UserGateway {
     @Override
     public boolean deleteUserById(String userId) {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(webClientUrlConfig.getUrl() + userId))
-                .DELETE()
+                .uri(URI.create(webClientUrl + "/" + userId))
+                .timeout(Duration.of(1, SECONDS))
+                .POST(HttpRequest.BodyPublishers.noBody())
                 .build();
         HttpResponse<String> response = null;
         try {
@@ -86,8 +94,6 @@ public class HttpUserGateway implements UserGateway {
         } catch (IOException | InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-
-
         if (response != null) {
             System.out.println(response.statusCode());
             return true;
