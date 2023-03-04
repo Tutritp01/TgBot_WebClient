@@ -25,7 +25,7 @@ import static java.time.temporal.ChronoUnit.SECONDS;
 public class HttpUserGateway implements UserGateway {
     @Autowired
     private ObjectMapper objectMapper;
-    private String webClientUrl;
+    private final String webClientUrl;
 
 
     @Autowired
@@ -75,7 +75,7 @@ public class HttpUserGateway implements UserGateway {
             Thread.currentThread().interrupt();
         }
         if (response != null && response.request().bodyPublisher().isPresent()) {
-            System.out.println(response.statusCode());
+            System.err.println(response.statusCode());
         }
         return user;
     }
@@ -83,18 +83,18 @@ public class HttpUserGateway implements UserGateway {
 
     @Override
     public boolean deleteUserById(String userId) {
-
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(webClientUrl + "/" + userId))
                 .timeout(Duration.of(1, SECONDS))
-                .POST(HttpRequest.BodyPublishers.noBody())
+                .DELETE()
                 .build();
+        HttpResponse<String> response = null;
         try {
-             httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        return false;
+        return response != null && response.request().bodyPublisher().isPresent();
     }
 
     private HttpRequest.BodyPublisher createUserBodyPublisher(User user) {
