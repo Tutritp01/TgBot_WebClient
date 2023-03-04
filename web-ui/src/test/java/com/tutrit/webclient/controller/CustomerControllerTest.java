@@ -77,7 +77,7 @@ class CustomerControllerTest {
                         .param("phoneNumber", "+3754478937721")
                         .param("email", "VladVrest@mail.com")
                         .param("save", "push"))
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/customers/23"))
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/customers"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
@@ -94,7 +94,7 @@ class CustomerControllerTest {
                         .param("phoneNumber", "+3754478937721")
                         .param("email", "VladVrest@mail.com")
                         .param("delete", "push"))
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/customers/23"))
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/customers"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andDo(MockMvcResultHandlers.print())
                 .andReturn();
