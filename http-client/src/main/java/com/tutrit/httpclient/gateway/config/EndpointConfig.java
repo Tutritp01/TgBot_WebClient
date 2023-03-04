@@ -1,10 +1,9 @@
 package com.tutrit.httpclient.gateway.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-
-@Configuration()
+@Component
 public class EndpointConfig {
     @Value("${endpoint.rest-api}")
     public String restApiUrl;
