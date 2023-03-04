@@ -11,9 +11,5 @@ public class ConfigController {
     @Autowired
     WebClientUrlConfig endpointConfig;
 
-    @GetMapping("/webClientUrl")
-    public String getUri(){
-        return endpointConfig.getUrl();
-    }
 
 }

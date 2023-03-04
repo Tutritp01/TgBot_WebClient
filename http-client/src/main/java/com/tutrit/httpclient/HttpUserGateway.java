@@ -4,9 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.User;
 import com.tutrit.gateway.UserGateway;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
+import com.tutrit.httpclient.config.ConfigProvider;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -17,53 +15,57 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.Optional;
 
-import static java.net.http.HttpClient.Version.HTTP_2;
 import static java.time.temporal.ChronoUnit.SECONDS;
 
-@Qualifier
 @Component
 public class HttpUserGateway implements UserGateway {
-    @Autowired
-    private ObjectMapper objectMapper;
-    private final String webClientUrl;
+    private final ObjectMapper objectMapper;
+    private final HttpClient httpClient;
+    private final ConfigProvider config;
 
 
-    @Autowired
-    public HttpUserGateway(@Value("${endpoint.web-client}") String webClientUrl) {
-        this.webClientUrl = webClientUrl + "/users";
+    public HttpUserGateway(final ObjectMapper objectMapper,
+                           final HttpClient httpClient,
+                           final ConfigProvider config) {
+        this.objectMapper = objectMapper;
+        this.httpClient = httpClient;
+        this.config = config;
     }
-
-    private static final HttpClient httpClient = HttpClient.newBuilder().version(HTTP_2).build();
 
 
     @Override
     public Optional<User> findUserById(String userId) {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create(webClientUrl + "/" + userId))
-                .timeout(Duration.of(1, SECONDS))
+                .uri(URI.create("%s/%s".formatted(config.getUrl(), userId)))
                 .build();
-        HttpResponse<String> response = null;
-        try {
-            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        User user = null;
-        if (response != null && response.request().bodyPublisher().isPresent()) {
-            try {
-                user = objectMapper.readValue(response.body(), User.class);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        }
+        HttpResponse<String> response = performGet(request);
+        User user = mapJsonStringToUser(response);
         return Optional.ofNullable(user);
+    }
+
+    private User mapJsonStringToUser(final HttpResponse<String> response) {
+        try {
+            return objectMapper.readValue(response.body(), User.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Can't read response get", e); // TODO: 3/4/23 create and process unfriendly exception
+        }
+    }
+
+    private HttpResponse<String> performGet(final HttpRequest request) {
+        try {
+            return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Can't perform get", e); // TODO: 3/4/23 create and process unfriendly exception
+        }
     }
 
     @Override
     public User saveUser(User user) {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(webClientUrl + "/" + user.userId()))
+                .uri(URI.create(config.getUrl() + "/" + user.userId()))
                 .timeout(Duration.of(1, SECONDS))
                 .POST(createUserBodyPublisher(user))
                 .header("Content-Type", "application/json")
@@ -84,7 +86,7 @@ public class HttpUserGateway implements UserGateway {
     @Override
     public boolean deleteUserById(String userId) {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(webClientUrl + "/" + userId))
+                .uri(URI.create(config.getUrl() + "/" + userId))
                 .timeout(Duration.of(1, SECONDS))
                 .DELETE()
                 .build();
