@@ -3,66 +3,52 @@ package com.tutrit.controller.gateway;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Car;
+import com.tutrit.config.ConfigProvider;
 import com.tutrit.gateway.CarGateway;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Objects;
 import java.util.Optional;
 
 @Component
 public class CarGatewayHttp implements CarGateway {
-    private static final String REQUEST_URI = "http://3.124.0.23:8082/cars/";
+    private final ObjectMapper objectMapper;
+    private final HttpClient httpClient;
+    private final ConfigProvider configProvider;
 
-    private static final HttpClient httpClient = HttpClient.newBuilder()
-            .version(HttpClient.Version.HTTP_2)
-            .build();
+    public CarGatewayHttp(ObjectMapper objectMapper, HttpClient httpClient, ConfigProvider configProvider) {
+        this.objectMapper = objectMapper;
+        this.httpClient = httpClient;
+        this.configProvider = configProvider;
+    }
 
     @Override
     public Car saveCar(Car car) {
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(REQUEST_URI))
+                .uri(URI.create(makeUri(car.carId())))
                 .POST(HttpRequest.BodyPublishers.ofString(setBody(car)))
                 .header("Content-Type", "application/json")
                 .build();
 
-        try {
-            httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        performGet(request);
         return car;
     }
+
 
     @Override
     public Optional<Car> findCarById(String id) {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create(REQUEST_URI + id))
+                .uri(URI.create(makeUri(id)))
                 .build();
 
-        HttpResponse<String> response = null;
-        try {
-            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-
-        Car car = null;
-        try {
-            if (Objects.requireNonNull(response).request().bodyPublisher().isPresent()) {
-                ObjectMapper objectMapper = new ObjectMapper();
-                car = objectMapper.readValue(response.body(), Car.class);
-            }
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        HttpResponse<String> response = performGet(request);
+        Car car = mapJsonStringToUser(response);
         return Optional.ofNullable(car);
     }
 
@@ -70,33 +56,41 @@ public class CarGatewayHttp implements CarGateway {
     public boolean deleteCarById(String id) {
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(REQUEST_URI + id))
+                .uri(URI.create(makeUri(id)))
                 .POST(HttpRequest.BodyPublishers.noBody())
                 .build();
 
-        try {
-            httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        performGet(request);
         return false;
     }
 
-    private static String setBody(Car car) {
-        return String.format(
-                "{\"carId\": \"%s\", \"owner\": \"%s\", \"vin\": \"%s\", " +
-                        "\"plateNumber\": \"%s\", \"brand\": \"%s\", \"model\": \"%s\", " +
-                        "\"generation\": \"%s\", \"modification\": \"%s\", \"engine\": \"%s\", " +
-                        "\"year\": %s }",
-                car.carId(),
-                car.owner(),
-                car.vin(),
-                car.plateNumber(),
-                car.brand(),
-                car.model(),
-                car.generation(),
-                car.modification(),
-                car.engine(),
-                car.year());
+    private String makeUri(String id) {
+        return "%s/%s/%s".formatted(configProvider.getUrl(), "cars", id);
+    }
+
+    private String setBody(Car car) {
+        try {
+            return objectMapper.writeValueAsString(car);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Can't perform get", e);
+        }
+    }
+
+    private HttpResponse<String> performGet(final HttpRequest request) {
+        try {
+            return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Can't perform get", e);
+        }
+    }
+
+    private Car mapJsonStringToUser(final HttpResponse<String> response) {
+        try {
+            return objectMapper.readValue(response.body(), Car.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Can't read response get", e);
+        }
     }
 }
