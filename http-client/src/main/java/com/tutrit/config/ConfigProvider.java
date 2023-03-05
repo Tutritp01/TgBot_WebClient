@@ -1,4 +1,4 @@
-package com.tutrit.controller.gateway.config;
+package com.tutrit.config;
 
 import org.springframework.stereotype.Component;
 

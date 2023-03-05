@@ -1,4 +1,4 @@
-package com.tutrit.controller.gateway.config;
+package com.tutrit.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
