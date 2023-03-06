@@ -11,10 +11,10 @@ import static java.net.http.HttpClient.Version.HTTP_2;
 
 @Configuration
 public class HttpClientConfig {
-    @Value("${endpoint.rest-api}")
-    public String restApiUrl;
+    @Value("${endpoint.rest-api:http://localhost:8082}")
+    private String restApiUrl;
 
-    public String getRestApiUrl() {
+    String getRestApiUrl() {
         return restApiUrl;
     }
 
@@ -23,4 +23,8 @@ public class HttpClientConfig {
         return HttpClient.newBuilder().version(HTTP_2).build();
     }
 
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
 }

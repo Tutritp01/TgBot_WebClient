@@ -5,9 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Customer;
 import com.tutrit.gateway.CustomerGateway;
-import com.tutrit.httpclient.gateway.config.HttpClientConfig;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.tutrit.httpclient.gateway.config.ConfigProvider;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -16,29 +14,25 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Optional;
 
-@Qualifier
 @Component
 public class HttpCustomerGateway implements CustomerGateway {
     private final ObjectMapper objectMapper;
     private final HttpClient httpClient;
-    private final HttpClientConfig config;
+    private final ConfigProvider config;
 
-    @Autowired
-    public HttpCustomerGateway(
-            final ObjectMapper objectMapper,
-            final HttpClient httpClient,
-            final HttpClientConfig config) {
+    public HttpCustomerGateway(final ObjectMapper objectMapper,
+                               final HttpClient httpClient,
+                               final ConfigProvider config) {
         this.objectMapper = objectMapper;
         this.httpClient = httpClient;
         this.config = config;
     }
 
-
     @Override
     public Customer saveCustomer(Customer customer) {
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("%s/%s".formatted(config.getRestApiUrl(), customer.customerId())))
+                .uri(URI.create("%s/%s".formatted(config.getUrl(), customer.customerId())))
                 .POST(createCustomerBodyPublisher(customer))
                 .header("Content-Type", "application/json")
                 .build();
@@ -50,15 +44,22 @@ public class HttpCustomerGateway implements CustomerGateway {
 
     @Override
     public Optional<Customer> findCustomerById(String customerId) {
-
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create("%s/%s".formatted(config.getRestApiUrl(), customerId)))
+                .uri(URI.create("%s/%s".formatted(config.getUrl(), customerId)))
                 .build();
-
         HttpResponse<String> response = performGet(request);
-        Customer customer = mapJsonStringToCustomer(response);
+        Customer customer = mapJsonStringToUser(response);
         return Optional.ofNullable(customer);
+    }
+
+    private Customer mapJsonStringToUser(final HttpResponse<String> response) {
+        try {
+            return objectMapper.readValue(response.body(), Customer.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Can't read response get", e);
+        }
     }
 
     private HttpResponse<String> performGet(final HttpRequest request) {
@@ -69,21 +70,13 @@ public class HttpCustomerGateway implements CustomerGateway {
             throw new RuntimeException("Can't perform get", e);
         }
     }
-
-    private Customer mapJsonStringToCustomer(final HttpResponse<String> response) {
-        try {
-            return objectMapper.readValue(response.body(), Customer.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Can't read response get", e);
-        }
-    }
-
     private HttpRequest.BodyPublisher createCustomerBodyPublisher(Customer customer) {
-        return HttpRequest.BodyPublishers.ofString(
-                (String.format(
-                        "{\"customerId\":\"%s\"\"name\":\"%s\",\"city\":\"%s\",\"phoneNumber\":\"%s\",\"email\":\"%s\"}",
-                        customer.customerId(), customer.name(), customer.city(), customer.phoneNumber(), customer.email())));
+        try {
+            String string = objectMapper.writeValueAsString(customer);
+            return HttpRequest.BodyPublishers.ofString(string);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error when creating the request body", e);
+        }
     }
 
     @Override

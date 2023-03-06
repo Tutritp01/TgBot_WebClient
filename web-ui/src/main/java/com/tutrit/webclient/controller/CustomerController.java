@@ -15,11 +15,10 @@ import java.util.Optional;
 @Controller
 public class CustomerController {
 
+    @Autowired(required = false)
+
     private CustomerGateway customerGateway;
 
-    public CustomerController(final CustomerGateway customerGateway) {
-        this.customerGateway = customerGateway;
-    }
 
     @GetMapping("/customers")
     public ModelAndView showEmptyForm() {
