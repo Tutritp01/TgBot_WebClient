@@ -23,8 +23,4 @@ public class HttpClientConfig {
         return HttpClient.newBuilder().version(HTTP_2).build();
     }
 
-    @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper();
-    }
 }
