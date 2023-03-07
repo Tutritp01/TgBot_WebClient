@@ -14,16 +14,15 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Optional;
 
-
 @Component
 public class HttpCustomerGateway implements CustomerGateway {
     private final ObjectMapper objectMapper;
     private final HttpClient httpClient;
     private final ConfigProvider config;
 
-    public HttpCustomerGateway(ObjectMapper objectMapper,
-                               HttpClient httpClient,
-                               ConfigProvider config) {
+    public HttpCustomerGateway(final ObjectMapper objectMapper,
+                               final HttpClient httpClient,
+                               final ConfigProvider config) {
         this.objectMapper = objectMapper;
         this.httpClient = httpClient;
         this.config = config;
