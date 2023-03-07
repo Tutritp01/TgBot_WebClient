@@ -3,6 +3,7 @@ package com.tutrit.webclient.controller;
 import com.tutrit.bean.User;
 import com.tutrit.gateway.UserGateway;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,16 +16,8 @@ import java.util.Optional;
 @Controller
 public class UserController {
 
-    @Autowired
+    @Autowired(required = false)
     private UserGateway userGateway;
-
-    @GetMapping("/users")
-    public ModelAndView emptyForm() {
-        var mov = new ModelAndView();
-        mov.addObject("user", new User(null, null, null));
-        mov.setViewName("user-form");
-        return mov;
-    }
 
     @GetMapping("/users/{userId}")
     public ModelAndView findUserById(@PathVariable String userId) {

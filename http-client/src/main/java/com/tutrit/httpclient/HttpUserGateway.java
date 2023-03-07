@@ -4,9 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.User;
 import com.tutrit.gateway.UserGateway;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
+import com.tutrit.httpclient.config.ConfigProvider;
+import com.tutrit.httpclient.config.HttpClientConfig;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -14,87 +13,53 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.Duration;
 import java.util.Optional;
 
-import static java.net.http.HttpClient.Version.HTTP_2;
-import static java.time.temporal.ChronoUnit.SECONDS;
-
-@Qualifier
 @Component
 public class HttpUserGateway implements UserGateway {
-    @Autowired
-    private ObjectMapper objectMapper;
-    private final String webClientUrl;
 
+    private final ObjectMapper objectMapper;
+    private final ConfigProvider config;
+    private final HttpClient httpClient;
 
-    @Autowired
-    public HttpUserGateway(@Value("${endpoint.web-client}") String webClientUrl) {
-        this.webClientUrl = webClientUrl + "/users";
+    public HttpUserGateway(
+
+            final ConfigProvider config,
+            final HttpClient httpClient,
+            final ObjectMapper objectMapper
+    ) {
+        this.objectMapper = objectMapper;
+        this.config = config;
+        this.httpClient = httpClient;
     }
-
-    private static final HttpClient httpClient = HttpClient.newBuilder().version(HTTP_2).build();
 
 
     @Override
     public Optional<User> findUserById(String userId) {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create(webClientUrl + "/" + userId))
-                .timeout(Duration.of(1, SECONDS))
+                .uri(URI.create("%s/%s".formatted(config.getUrl(), userId)))
                 .build();
-        HttpResponse<String> response = null;
-        try {
-            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        User user = null;
-        if (response != null && response.request().bodyPublisher().isPresent()) {
-            try {
-                user = objectMapper.readValue(response.body(), User.class);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        }
+        HttpResponse<String> response = getStringHttpResponse(request);
+        User user = mapJsonStringToUser(response);
         return Optional.ofNullable(user);
     }
 
-    @Override
-    public User saveUser(User user) {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(webClientUrl + "/" + user.userId()))
-                .timeout(Duration.of(1, SECONDS))
-                .POST(createUserBodyPublisher(user))
-                .header("Content-Type", "application/json")
-                .build();
-        HttpResponse<String> response = null;
+    private User mapJsonStringToUser(HttpResponse<String> response) {
         try {
-            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            Thread.currentThread().interrupt();
+            return objectMapper.readValue(response.body(), User.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Can't read mapJsonStringToUser", e);// TODO: 07.03.2023
         }
-        if (response != null && response.request().bodyPublisher().isPresent()) {
-            System.err.println(response.statusCode());
-        }
-        return user;
     }
 
-
-    @Override
-    public boolean deleteUserById(String userId) {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(webClientUrl + "/" + userId))
-                .timeout(Duration.of(1, SECONDS))
-                .DELETE()
-                .build();
-        HttpResponse<String> response = null;
+    private HttpResponse<String> getStringHttpResponse(HttpRequest request) {
         try {
-            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
             Thread.currentThread().interrupt();
+            throw new RuntimeException("Can't read getStringHttpResponse", e);// TODO: 07.03.2023
         }
-        return response != null && response.request().bodyPublisher().isPresent();
     }
 
     private HttpRequest.BodyPublisher createUserBodyPublisher(User user) {
@@ -104,5 +69,32 @@ public class HttpUserGateway implements UserGateway {
                         """.formatted(
                         user.userId(), user.name(), user.phoneNumber()
                 ));
+    }
+
+    @Override
+    public User saveUser(User user) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .POST(createUserBodyPublisher(user))
+                .uri(URI.create("%s/%s".formatted(config.getUrl(), user.userId())))
+                .header("Content-Type", "application/json")
+                .build();
+        errorWhileSaveUser(getStringHttpResponse(request));
+        return user;
+    }
+
+    private void errorWhileSaveUser(HttpResponse<String> response) {
+        if (response.statusCode() < 200 || response.statusCode() > 299) {
+            throw new RuntimeException("Can't to save user: " + response.body());
+        }
+    }
+
+    @Override
+    public boolean deleteUserById(String userId) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("%s/%s".formatted(config.getUrl(), userId)))
+                .DELETE()
+                .build();
+        HttpResponse<String> response = getStringHttpResponse(request);
+        return response != null && response.request().bodyPublisher().isPresent();
     }
 }
