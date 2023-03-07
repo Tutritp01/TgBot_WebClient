@@ -11,10 +11,10 @@ import static java.net.http.HttpClient.Version.HTTP_2;
 
 @Configuration
 public class HttpClientConfig {
-    @Value("${endpoint.rest-api}")
-    public String restApiUrl;
+    @Value("specify the variable")
+    private String restApiUrl;
 
-    public String getRestApiUrl() {
+    String getRestApiUrl() {
         return restApiUrl;
     }
 
