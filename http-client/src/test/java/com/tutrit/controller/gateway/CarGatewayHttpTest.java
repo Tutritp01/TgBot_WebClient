@@ -1,37 +1,64 @@
 package com.tutrit.controller.gateway;
 
 import com.tutrit.bean.Car;
-import com.tutrit.gateway.CarGateway;
+import com.tutrit.config.ConfigProvider;
+import com.tutrit.config.SpringContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 
-import java.util.Optional;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
+@SpringBootTest(classes = SpringContext.SpringConfig.class)
 class CarGatewayHttpTest {
 
-    CarGateway carGateway;
+    @Autowired
+    CarGatewayHttp carGatewayHttp;
+    @MockBean
+    ConfigProvider webClientUrlConfig;
+    @MockBean
+    HttpClient httpClient;
+    @MockBean
+    HttpResponse httpResponse;
 
     @BeforeEach
     void setUp() {
-        carGateway = new CarGatewayHttp();
+        Mockito.when(webClientUrlConfig.getUrl()).thenReturn("http://localhost:8080");
     }
 
     @Test
     void saveCar() {
-        Car result = carGateway.saveCar(makeCar());
+        Car result = carGatewayHttp.saveCar(makeCar());
         Assertions.assertEquals(makeCar(), result);
     }
 
     @Test
-    void findCarById() {
-        Optional<Car> result = carGateway.findCarById("12345");
-        Assertions.assertInstanceOf(Optional.class, result);
+    void findCarById() throws IOException, InterruptedException {
+        Mockito.when(httpClient.send(makeRequest(), HttpResponse.BodyHandlers.ofString())).thenReturn(httpResponse);
+//        Mockito.when(httpResponse.statusCode()).thenReturn(HttpStatus.OK.value());
+        Car car = carGatewayHttp.findCarById("12345").get();
+        Assertions.assertEquals(makeCar(), car);
     }
 
     @Test
     void deleteCarById() {
-        Assertions.assertFalse(carGateway.deleteCarById("12345"));
+        Assertions.assertFalse(carGatewayHttp.deleteCarById("12345"));
+    }
+
+    HttpRequest makeRequest() {
+        return HttpRequest.newBuilder()
+                .GET()
+                .uri(URI.create("http://localhost:8080/cars/12345"))
+                .build();
     }
 
     private Car makeCar() {
