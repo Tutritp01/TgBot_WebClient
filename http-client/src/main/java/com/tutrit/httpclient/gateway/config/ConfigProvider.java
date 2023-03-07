@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class ConfigProvider {
     private final HttpClientConfig httpClientConfig;
 
-    public ConfigProvider(HttpClientConfig httpClientConfig) {
+    public ConfigProvider(final HttpClientConfig httpClientConfig) {
         this.httpClientConfig = httpClientConfig;
     }
 

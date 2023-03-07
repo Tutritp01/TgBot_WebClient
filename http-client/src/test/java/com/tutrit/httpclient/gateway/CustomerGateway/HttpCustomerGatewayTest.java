@@ -3,7 +3,6 @@ package com.tutrit.httpclient.gateway.CustomerGateway;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Customer;
 import com.tutrit.httpclient.gateway.config.ConfigProvider;
-import com.tutrit.httpclient.gateway.config.HttpClientConfig;
 import com.tutrit.httpclient.gateway.config.SpringContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 
@@ -44,7 +42,7 @@ class HttpCustomerGatewayTest {
     }
 
     @Test
-    void saveCustomer() throws IOException, InterruptedException{
+    void saveCustomer() throws IOException, InterruptedException {
         when(httpClient.send(makeRequest(), HttpResponse.BodyHandlers.ofString())).thenReturn(httpResponse);
         when(httpResponse.body()).thenReturn(objectMapper.writeValueAsString(createCustomer()));
         when(httpResponse.statusCode()).thenReturn(HttpStatus.OK.value());
