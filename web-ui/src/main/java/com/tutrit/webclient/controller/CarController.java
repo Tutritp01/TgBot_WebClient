@@ -14,12 +14,8 @@ import java.util.Optional;
 @RequestMapping("/cars")
 public class CarController {
 
-    private final CarGateway carGateway;
-
-    @Autowired
-    public CarController(CarGateway carGateway) {
-        this.carGateway = carGateway;
-    }
+    @Autowired(required = false)
+    private CarGateway carGateway;
 
     @GetMapping("/{id}")
     public ModelAndView findCarById(@PathVariable String id) {
