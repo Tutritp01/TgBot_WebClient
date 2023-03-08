@@ -10,7 +10,7 @@ import java.net.http.HttpClient;
 @Configuration
 public class WebClientUrlConfig {
 
-    @Value("${endpoint.web-client}")
+    @Value("${endpoint.web-client:http://localhost:8080}")
     private String webClientUrl;
 
     String getUrl() {
