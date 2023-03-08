@@ -8,9 +8,9 @@ import org.springframework.context.annotation.Configuration;
 import java.net.http.HttpClient;
 
 @Configuration
-public class WebClientUrlConfig {
+public class HttpClientConfig {
 
-    @Value("${endpoint.web-client:http://localhost:8080}")
+    @Value("${url.rest-api:http://localhost:8080}")
     private String webClientUrl;
 
     String getUrl() {
