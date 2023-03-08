@@ -5,13 +5,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConfigProvider {
 
-    private final WebClientUrlConfig webClientUrlConfig;
+    private final HttpClientConfig httpClientConfig;
 
-    public ConfigProvider(final WebClientUrlConfig webClientUrlConfig) {
-        this.webClientUrlConfig = webClientUrlConfig;
+    public ConfigProvider(final HttpClientConfig httpClientConfig) {
+        this.httpClientConfig = httpClientConfig;
     }
 
     public String getUrl() {
-        return webClientUrlConfig.getUrl();
+        return httpClientConfig.getUrl();
     }
 }

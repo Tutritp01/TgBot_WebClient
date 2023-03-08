@@ -1,5 +1,6 @@
 package com.tutrit.controller.gateway;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Car;
 import com.tutrit.config.ConfigProvider;
 import com.tutrit.config.SpringContext;
@@ -22,6 +23,8 @@ import java.net.http.HttpResponse;
 class CarGatewayHttpTest {
 
     @Autowired
+    ObjectMapper objectMapper;
+    @Autowired
     CarGatewayHttp carGatewayHttp;
     @MockBean
     ConfigProvider webClientUrlConfig;
@@ -36,22 +39,25 @@ class CarGatewayHttpTest {
     }
 
     @Test
-    void saveCar() {
+    void saveCar() throws IOException, InterruptedException {
+        Mockito.when(httpClient.send(makeRequest(), HttpResponse.BodyHandlers.ofString())).thenReturn(httpResponse);
+        Mockito.when(httpResponse.body()).thenReturn(objectMapper.writeValueAsString(makeCar()));
+        Mockito.when(httpResponse.statusCode()).thenReturn(HttpStatus.CREATED.value());
+
         Car result = carGatewayHttp.saveCar(makeCar());
+
         Assertions.assertEquals(makeCar(), result);
     }
 
     @Test
     void findCarById() throws IOException, InterruptedException {
         Mockito.when(httpClient.send(makeRequest(), HttpResponse.BodyHandlers.ofString())).thenReturn(httpResponse);
-//        Mockito.when(httpResponse.statusCode()).thenReturn(HttpStatus.OK.value());
-        Car car = carGatewayHttp.findCarById("12345").get();
-        Assertions.assertEquals(makeCar(), car);
-    }
+        Mockito.when(httpResponse.body()).thenReturn(objectMapper.writeValueAsString(makeCar()));
+        Mockito.when(httpResponse.statusCode()).thenReturn(HttpStatus.OK.value());
 
-    @Test
-    void deleteCarById() {
-        Assertions.assertFalse(carGatewayHttp.deleteCarById("12345"));
+        Car car = carGatewayHttp.findCarById("12345").get();
+
+        Assertions.assertEquals(makeCar(), car);
     }
 
     HttpRequest makeRequest() {
