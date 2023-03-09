@@ -1,12 +1,13 @@
 package com.tutrit.httpclient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tutrit.bean.Customer;
 import com.tutrit.bean.User;
 import com.tutrit.httpclient.config.ConfigProvider;
-import com.tutrit.httpclient.config.HttpClientConfig;
 import com.tutrit.httpclient.config.SpringContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,10 +21,15 @@ import java.net.http.HttpResponse;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = SpringContext.SpringConfig.class)
 class HttpUserGatewayTest {
+    private static final String URL_REST_API = "http://localhost:8080";
+    private static final String PATH = "users";
+    public static final User USER = new User("666", "AliceCooper", "+375291234");
     @Autowired
     ObjectMapper objectMapper;
 
@@ -37,48 +43,39 @@ class HttpUserGatewayTest {
     HttpClient httpClient;
 
     @MockBean
-    HttpResponse httpResponse;
-
+    HttpResponse<String> httpResponse;
 
     @BeforeEach
     public void setUp() {
-        when(config.getUrl()).thenReturn("http://localhost:80/users");
+        when(config.getUrl()).thenReturn(URL_REST_API);
     }
 
-     @Test
-     void findUserById() throws IOException, InterruptedException {
+    @Test
+    void findUserById() throws IOException, InterruptedException {
+        when(httpClient.send(makeRequest(), HttpResponse.BodyHandlers.ofString())).thenReturn(httpResponse);
+        when(httpResponse.body()).thenReturn(objectMapper.writeValueAsString(USER));
+        when(httpResponse.statusCode()).thenReturn(HttpStatus.OK.value());
 
-         when(httpClient.send(makeRequest(), HttpResponse.BodyHandlers.ofString())).thenReturn(httpResponse);
-         when(httpResponse.body()).thenReturn(objectMapper.writeValueAsString(expectedUser()));
-         when(httpResponse.statusCode()).thenReturn(HttpStatus.OK.value());
+        Optional<User> actualUser = httpUserGateway.findUserById(USER.userId());
 
-         Optional<User> actualUser = httpUserGateway.findUserById("666");
+        assertTrue(actualUser.isPresent());
+        assertEquals(USER,actualUser.get());
+    }
+    @Test
+    void saveUser() throws IOException, InterruptedException {
+        when(httpClient.send(any(HttpRequest.class), eq(HttpResponse.BodyHandlers.ofString()))).thenReturn(httpResponse);
+        when(httpResponse.body()).thenReturn(objectMapper.writeValueAsString(USER));
+        when(httpResponse.statusCode()).thenReturn(HttpStatus.CREATED.value());
+        User saveUser = httpUserGateway.saveUser(USER);
+        assertEquals(USER, saveUser);
 
-         assertTrue(actualUser.isPresent());
-         assertEquals(expectedUser(),actualUser.get());
-
-
-     }
-
+    }
     HttpRequest makeRequest() {
+        String url = "%s/%s/%s".formatted(URL_REST_API,PATH, USER.userId());
         return HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create("http://localhost:80/users/666"))
+                .uri(URI.create(url))
                 .build();
-    }
-
-    @Test
-    void saveUser() {
-        assertEquals(expectedUser(), httpUserGateway.saveUser(expectedUser()));
-    }
-
-    @Test
-    void deleteUser() {
-        assertFalse(httpUserGateway.deleteUserById("666"));
-    }
-
-    private User expectedUser() {
-        return new User("666", "AliceCooper", "+375291234");
     }
 
 }

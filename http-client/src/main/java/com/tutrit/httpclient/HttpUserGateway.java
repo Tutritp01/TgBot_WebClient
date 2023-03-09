@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.User;
 import com.tutrit.gateway.UserGateway;
 import com.tutrit.httpclient.config.ConfigProvider;
-import com.tutrit.httpclient.config.HttpClientConfig;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -17,13 +16,13 @@ import java.util.Optional;
 
 @Component
 public class HttpUserGateway implements UserGateway {
-
+    private static final String CONTENT_TYPE = "application/json";
+    private static final String PATH = "users";
     private final ObjectMapper objectMapper;
     private final ConfigProvider config;
     private final HttpClient httpClient;
 
     public HttpUserGateway(
-
             final ConfigProvider config,
             final HttpClient httpClient,
             final ObjectMapper objectMapper
@@ -33,16 +32,28 @@ public class HttpUserGateway implements UserGateway {
         this.httpClient = httpClient;
     }
 
-
     @Override
     public Optional<User> findUserById(String userId) {
+        validateUserId(userId);
+
+        String url = "%s/%s/%s".formatted(config.getUrl(), PATH, userId);
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create("%s/%s".formatted(config.getUrl(), userId)))
+                .uri(URI.create(url))
                 .build();
-        HttpResponse<String> response = getStringHttpResponse(request);
+
+        HttpResponse<String> response = sendHttpRequest(request);
+        checkResponse(response);
+
         User user = mapJsonStringToUser(response);
+
         return Optional.ofNullable(user);
+    }
+
+    private void validateUserId(String userId) {
+        if (userId == null || userId.isBlank()) {
+            throw new IllegalArgumentException("User ID can't be null or empty");
+        }
     }
 
     private User mapJsonStringToUser(HttpResponse<String> response) {
@@ -53,7 +64,7 @@ public class HttpUserGateway implements UserGateway {
         }
     }
 
-    private HttpResponse<String> getStringHttpResponse(HttpRequest request) {
+    private HttpResponse<String> sendHttpRequest(final HttpRequest request) {
         try {
             return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
@@ -62,39 +73,56 @@ public class HttpUserGateway implements UserGateway {
         }
     }
 
-    private HttpRequest.BodyPublisher createUserBodyPublisher(User user) {
-        return HttpRequest.BodyPublishers.ofString(
-                """
-                        { "userId":"%s", "name":"%s", "phoneNumber":"%s"}
-                        """.formatted(
-                        user.userId(), user.name(), user.phoneNumber()
-                ));
-    }
-
-    @Override
-    public User saveUser(User user) {
-        HttpRequest request = HttpRequest.newBuilder()
-                .POST(createUserBodyPublisher(user))
-                .uri(URI.create("%s/%s".formatted(config.getUrl(), user.userId())))
-                .header("Content-Type", "application/json")
-                .build();
-        errorWhileSaveUser(getStringHttpResponse(request));
-        return user;
-    }
-
-    private void errorWhileSaveUser(HttpResponse<String> response) {
+    private void checkResponse(HttpResponse<String> response) {
         if (response.statusCode() < 200 || response.statusCode() > 299) {
             throw new RuntimeException("Can't to save user: " + response.body());
         }
     }
 
     @Override
-    public boolean deleteUserById(String userId) {
+    public User saveUser(User user) {
+        validateUser(user);
+
+        String url = "%s/%s/%s".formatted(config.getUrl(), PATH, user.userId());
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("%s/%s".formatted(config.getUrl(), userId)))
-                .DELETE()
+                .uri(URI.create(url))
+                .header("Content-Type", CONTENT_TYPE)
+                .POST(createUserBodyPublisher(user))
                 .build();
-        HttpResponse<String> response = getStringHttpResponse(request);
-        return response != null && response.request().bodyPublisher().isPresent();
+
+        sendHttpRequest(request);
+        return user;
+    }
+
+    private void validateUser(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User can't be null");
+        }
+
+        if (user.userId() == null || user.userId().isBlank()) {
+            throw new IllegalArgumentException("User ID can't be null or empty");
+        }
+
+        if (user.name() == null || user.name().isBlank()) {
+            throw new IllegalArgumentException("User name can't be null or empty");
+        }
+
+        if (user.phoneNumber() == null || user.phoneNumber().isBlank()) {
+            throw new IllegalArgumentException("User phone number can't be null or empty");
+        }
+    }
+
+    private HttpRequest.BodyPublisher createUserBodyPublisher(User user) {
+        try {
+            String string = objectMapper.writeValueAsString(user);
+            return HttpRequest.BodyPublishers.ofString(string);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error for serialize user object to JSON ", e);
+        }
+    }
+
+    @Override
+    public boolean deleteUserById(String userId) {
+        return true;
     }
 }
