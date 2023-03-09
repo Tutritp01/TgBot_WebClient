@@ -10,7 +10,7 @@ import java.net.http.HttpClient;
 @Configuration
 public class HttpClientConfig {
 
-    @Value("${url.rest-api:http://localhost:8080}")
+    @Value("${url.rest-api:http://localhost:8082}")
     private String webClientUrl;
 
     String getUrl() {
