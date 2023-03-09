@@ -70,12 +70,13 @@ public class HttpCustomerGateway implements CustomerGateway {
             throw new RuntimeException("Can't perform get", e);
         }
     }
-
     private HttpRequest.BodyPublisher createCustomerBodyPublisher(Customer customer) {
-        return HttpRequest.BodyPublishers.ofString(
-                (String.format(
-                        "{\"customerId\":\"%s\"\"name\":\"%s\",\"city\":\"%s\",\"phoneNumber\":\"%s\",\"email\":\"%s\"}",
-                        customer.customerId(), customer.name(), customer.city(), customer.phoneNumber(), customer.email())));
+        try {
+            String string = objectMapper.writeValueAsString(customer);
+            return HttpRequest.BodyPublishers.ofString(string);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error when creating the request body", e);
+        }
     }
 
     @Override
