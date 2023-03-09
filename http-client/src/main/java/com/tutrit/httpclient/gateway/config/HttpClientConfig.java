@@ -11,7 +11,7 @@ import static java.net.http.HttpClient.Version.HTTP_2;
 
 @Configuration
 public class HttpClientConfig {
-    @Value("${endpoint.rest-api:http://localhost:8082/customers}")
+    @Value("${endpoint.rest-api:http://localhost:8082}")
     private String restApiUrl;
 
     String getRestApiUrl() {

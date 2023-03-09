@@ -32,7 +32,7 @@ public class HttpCustomerGateway implements CustomerGateway {
     public Customer saveCustomer(Customer customer) {
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("%s/%s".formatted(config.getUrl(), customer.customerId())))
+                .uri(URI.create("%s/%s".formatted(config.getUrl()+"/customers", customer.customerId())))
                 .POST(createCustomerBodyPublisher(customer))
                 .header("Content-Type", "application/json")
                 .build();
@@ -46,7 +46,7 @@ public class HttpCustomerGateway implements CustomerGateway {
     public Optional<Customer> findCustomerById(String customerId) {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create("%s/%s".formatted(config.getUrl(), customerId)))
+                .uri(URI.create("%s/%s".formatted(config.getUrl()+"/customers", customerId)))
                 .build();
         HttpResponse<String> response = performGet(request);
         Customer customer = mapJsonStringToUser(response);
