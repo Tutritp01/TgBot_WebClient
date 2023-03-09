@@ -1,12 +1,13 @@
-package com.tutrit.webclient;
+package com.tutrit;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
-public class WebClientApplication {
 
+@SpringBootApplication
+public class ApplicationRun {
     public static void main(String[] args) {
-        SpringApplication.run(WebClientApplication.class, args);
+        SpringApplication.run(ApplicationRun.class, args);
     }
+
 }

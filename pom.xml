@@ -24,6 +24,7 @@
         <module>web-flux-client</module>
         <module>apache-http-client</module>
         <module>rest-template-client</module>
+        <module>integration</module>
     </modules>
 
     <dependencies>
