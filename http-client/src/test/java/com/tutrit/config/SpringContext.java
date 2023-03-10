@@ -1,4 +1,4 @@
-package com.tutrit.httpclient.config;
+package com.tutrit.config;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -11,6 +11,5 @@ public class SpringContext {
     @EnableAutoConfiguration
     @ComponentScan(basePackages = "com.tutrit")
     public static class SpringConfig {
-
     }
 }

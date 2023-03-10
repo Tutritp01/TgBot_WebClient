@@ -3,8 +3,8 @@ package com.tutrit.httpclient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.User;
+import com.tutrit.config.ConfigProvider;
 import com.tutrit.gateway.UserGateway;
-import com.tutrit.httpclient.config.ConfigProvider;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

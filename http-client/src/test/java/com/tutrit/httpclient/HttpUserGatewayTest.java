@@ -1,13 +1,11 @@
 package com.tutrit.httpclient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tutrit.bean.Customer;
 import com.tutrit.bean.User;
-import com.tutrit.httpclient.config.ConfigProvider;
-import com.tutrit.httpclient.config.SpringContext;
+import com.tutrit.config.ConfigProvider;
+import com.tutrit.config.SpringContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,7 +18,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;

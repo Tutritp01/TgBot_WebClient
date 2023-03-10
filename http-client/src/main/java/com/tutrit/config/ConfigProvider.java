@@ -1,4 +1,4 @@
-package com.tutrit.httpclient.config;
+package com.tutrit.config;
 
 import org.springframework.stereotype.Component;
 
