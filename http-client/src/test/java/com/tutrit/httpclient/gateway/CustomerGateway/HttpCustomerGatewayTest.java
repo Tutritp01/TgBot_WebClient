@@ -3,7 +3,7 @@ package com.tutrit.httpclient.gateway.CustomerGateway;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Customer;
 import com.tutrit.config.ConfigProvider;
-import com.tutrit.httpclient.gateway.config.SpringContext;
+import com.tutrit.config.SpringContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
