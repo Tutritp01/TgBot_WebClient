@@ -12,10 +12,6 @@
 
     <artifactId>integration</artifactId>
 
-    <properties>
-        <exclude.tests>nothing-to-exclude</exclude.tests>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.tutrit</groupId>
