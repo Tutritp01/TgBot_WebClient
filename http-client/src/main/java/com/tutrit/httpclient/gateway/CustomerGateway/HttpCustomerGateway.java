@@ -4,8 +4,8 @@ package com.tutrit.httpclient.gateway.CustomerGateway;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Customer;
+import com.tutrit.config.ConfigProvider;
 import com.tutrit.gateway.CustomerGateway;
-import com.tutrit.httpclient.gateway.config.ConfigProvider;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;

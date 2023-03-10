@@ -2,7 +2,7 @@ package com.tutrit.httpclient.gateway.CustomerGateway;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Customer;
-import com.tutrit.httpclient.gateway.config.ConfigProvider;
+import com.tutrit.config.ConfigProvider;
 import com.tutrit.httpclient.gateway.config.SpringContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ class HttpCustomerGatewayTest {
 
     @BeforeEach
     public void setUp() throws IOException, InterruptedException {
-        Mockito.when(configProvider.getUrl()).thenReturn("http://localhost:8090/customers");
+        Mockito.when(configProvider.getUrl()).thenReturn("http://localhost:8090");
 
     }
 
