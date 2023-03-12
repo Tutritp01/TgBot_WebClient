@@ -24,8 +24,22 @@
         <module>web-flux-client</module>
         <module>apache-http-client</module>
         <module>rest-template-client</module>
-        <module>web-client-distributive</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>main</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>web-client-distributive</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>make_runnable</id>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>
@@ -56,23 +70,5 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring.boot.version}</version>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
