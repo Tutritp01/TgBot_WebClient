@@ -1,5 +1,6 @@
 package com.tutrit.webclient.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,11 +17,15 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+    @Value("${spring.security.user.password}")
+    private String userPassword;
+    @Value("${spring.security.admin.password}")
+    private String adminPassword;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeHttpRequests((authorize) -> authorize
+                .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasRole("USER")
                         .anyRequest().permitAll()
@@ -33,11 +38,11 @@ public class SecurityConfiguration {
     public UserDetailsService userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
         manager.createUser(User.withUsername("user")
-                .password(bCryptPasswordEncoder.encode("user"))
+                .password(bCryptPasswordEncoder.encode(userPassword))
                 .roles("USER")
                 .build());
         manager.createUser(User.withUsername("admin")
-                .password(bCryptPasswordEncoder.encode("admin"))
+                .password(bCryptPasswordEncoder.encode(adminPassword))
                 .roles("ADMIN")
                 .build());
         return manager;
