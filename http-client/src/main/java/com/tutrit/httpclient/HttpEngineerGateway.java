@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Engineer;
 import com.tutrit.config.ConfigProvider;
 import com.tutrit.gateway.EngineerGateway;
+import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class HttpEngineerGateway implements EngineerGateway {
     }
     @Override
     public Engineer saveEngineer(Engineer engineer) {
-        validateEngineer(engineer);
+
 
         String url = "%s/%s/%s".formatted(config.getUrl(), PATH, engineer.engineerId());
         HttpRequest request = HttpRequest.newBuilder()
@@ -46,43 +47,6 @@ public class HttpEngineerGateway implements EngineerGateway {
         return engineer;
     }
 
-    private void validateEngineer(Engineer engineer) {
-        if (engineer == null) {
-            throw new IllegalArgumentException("Engineer can't be null");
-        }
-
-        if (engineer.engineerId() == null || engineer.engineerId().isBlank()) {
-            throw new IllegalArgumentException("Engineer ID can't be null or empty");
-        }
-
-        if (engineer.firstName() == null || engineer.firstName().isBlank()) {
-            throw new IllegalArgumentException("Engineer first name can't be null or empty");
-        }
-
-        if (engineer.lastName() == null || engineer.lastName().isBlank()) {
-            throw new IllegalArgumentException("Engineer last name can't be null or empty");
-        }
-
-        if (engineer.function() == null || engineer.function().isBlank()) {
-            throw new IllegalArgumentException("Engineer function can't be null or empty");
-        }
-
-        if (engineer.category() == null || engineer.category().isBlank()) {
-            throw new IllegalArgumentException("Engineer category can't be null or empty");
-        }
-
-        if (engineer.education() == null || engineer.education().isBlank()) {
-            throw new IllegalArgumentException("Engineer education can't be null or empty");
-        }
-
-        if (engineer.experience() == null) {
-            throw new IllegalArgumentException("Engineer experience can't be null or empty");
-        }
-
-        if (engineer.generalExperience() == null) {
-            throw new IllegalArgumentException("Engineer generalExperience can't be null or empty");
-        }
-    }
 
     private HttpRequest.BodyPublisher createEngineerBodyPublisher(Engineer engineer) {
         try {
@@ -136,12 +100,12 @@ public class HttpEngineerGateway implements EngineerGateway {
 
     private void checkResponse(HttpResponse<String> response) {
         if (response.statusCode() < 200 || response.statusCode() > 299) {
-            throw new RuntimeException("Can't to save engineer: " + response.body());
+            throw new RuntimeException("Engineer not saved: " + response.body());
         }
     }
 
     @Override
-    public boolean deleteEngineerById(String engineerId) {
-        return false;
+    public boolean deleteEngineerById(String engineerId){
+        throw new NotImplementedException("This method is not implemented");
     }
 }
