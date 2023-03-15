@@ -17,9 +17,9 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    @Value("${spring.security.user.password}")
+    @Value("${spring.security.user.password:user}")
     private String userPassword;
-    @Value("${spring.security.admin.password}")
+    @Value("${spring.security.admin.password:admin}")
     private String adminPassword;
 
     @Bean
