@@ -1,17 +1,85 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<!--/*@thymesVar id="error_404" type="java.lang.String"*/-->
-<h1 th:if="${error_404}!=null" th:text="${error_404}"></h1>
-<form action="/users/{id}" method="post" >
-    <!--/*@thymesVar id="user" type="com.tutrit.bean.User"*/-->
-    <input name="userId" th:value="${user.userId()}"/>
-    <br>
-    <input name="name" th:value="${user.name()}"/>
-    <br>
-    <input name="phoneNumber" th:value="${user.phoneNumber()}"/>
-    <br>
-    <button name="save" type="submit">save</button>
-    <br>
-    <button name="delete" type="submit">delete</button>
-    <br>
-</form>
+<th:block th:insert="~{starter :: head}"></th:block>
+
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+    <th:block th:insert="~{starter :: navigation}"></th:block>
+
+    <th:block th:insert="~{starter :: aside}"></th:block>
+
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="container-fluid">
+
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Users</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Users</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+
+                <!--/*@thymesVar id="error_404" type="java.lang.String"*/-->
+                <h1 th:if="${error_404}!=null" th:text="${error_404}"></h1>
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">User Form</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <!--/*@thymesVar id="user" type="com.tutrit.bean.User"*/-->
+                    <form th:action="|/users/${user.userId()}|" method="post">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="text">Name</label>
+                                <input name="name"
+                                       th:value="${user.name()}"
+                                       type="text"
+                                       class="form-control"
+                                       id="text"
+                                       placeholder="Enter user name">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone_number">Phone number</label>
+                                <input name="phoneNumber"
+                                       th:value="${user.phoneNumber()}"
+                                       type="text"
+                                       class="form-control"
+                                       id="phone_number"
+                                       placeholder="Enter user phone number">
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <button name="save" type="submit" class="btn btn-primary">Save</button>
+                                </div>
+                                <div class="col-md-6">
+
+                                </div>
+                                <div class="col-md-3">
+                                    <button name="delete" type="submit" class="btn btn-danger">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <th:block th:insert="~{starter :: control-sidebar}"></th:block>
+    <th:block th:insert="~{starter :: footer}"></th:block>
+</div>
+<th:block th:insert="~{starter :: scripts}"></th:block>
+</body>
+</html>

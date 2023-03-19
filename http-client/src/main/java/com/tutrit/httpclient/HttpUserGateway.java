@@ -81,35 +81,33 @@ public class HttpUserGateway implements UserGateway {
 
     @Override
     public User saveUser(User user) {
-        validateUser(user);
+        HttpResponse<String> response = null;
 
-        String url = "%s/%s/%s".formatted(config.getUrl(), PATH, user.userId());
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .header("Content-Type", CONTENT_TYPE)
-                .POST(createUserBodyPublisher(user))
-                .build();
+        if (user.userId() == null) {
+            String url = "%s/%s".formatted(config.getUrl(), PATH);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", CONTENT_TYPE)
+                    .POST(createUserBodyPublisher(user))
+                    .build();
 
-        sendHttpRequest(request);
+            response = sendHttpRequest(request);
+        } else {
+            String url = "%s/%s/%s".formatted(config.getUrl(), PATH, user.userId());
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", CONTENT_TYPE)
+                    .POST(createUserBodyPublisher(user))
+                    .build();
+
+            response = sendHttpRequest(request);
+        }
+
+        checkResponse(response);
+
+        user = mapJsonStringToUser(response);
+
         return user;
-    }
-
-    private void validateUser(User user) {
-        if (user == null) {
-            throw new IllegalArgumentException("User can't be null");
-        }
-
-        if (user.userId() == null || user.userId().isBlank()) {
-            throw new IllegalArgumentException("User ID can't be null or empty");
-        }
-
-        if (user.name() == null || user.name().isBlank()) {
-            throw new IllegalArgumentException("User name can't be null or empty");
-        }
-
-        if (user.phoneNumber() == null || user.phoneNumber().isBlank()) {
-            throw new IllegalArgumentException("User phone number can't be null or empty");
-        }
     }
 
     private HttpRequest.BodyPublisher createUserBodyPublisher(User user) {
