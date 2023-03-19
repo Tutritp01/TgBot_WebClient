@@ -1,0 +1,17 @@
+server:
+  port: ${port}
+  error:
+    whitelabel:
+      enabled: true
+    include-stacktrace: always
+    include-message: always
+    include-exception: true
+    include-binding-errors: always
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:
+    git:
+      mode: full
