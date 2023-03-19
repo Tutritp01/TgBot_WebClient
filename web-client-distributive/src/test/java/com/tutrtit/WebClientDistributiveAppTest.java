@@ -11,8 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @AutoConfigureMockMvc
-@SpringBootTest(classes = ApplicationRun.class)
-public class ApplicationRunTest {
+@SpringBootTest(classes = WebClientDistributiveApp.class)
+public class WebClientDistributiveAppTest {
 
     @Autowired
     ApplicationContext ctx;

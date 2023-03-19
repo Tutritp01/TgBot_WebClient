@@ -1,0 +1,9 @@
+spring:
+  application:
+    name:  web-client
+  config:
+    import: optional:configserver:http://localhost:8888
+  profiles:
+    active: dev
+server:
+  port: 8081
