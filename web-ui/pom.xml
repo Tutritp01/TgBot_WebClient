@@ -36,6 +36,14 @@
     <profiles>
         <profile>
             <id>make_runnable</id>
+            <dependencies>
+                <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-config -->
+                <dependency>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-starter-config</artifactId>
+                    <version>4.0.1</version>
+                </dependency>
+            </dependencies>
             <build>
                 <plugins>
                     <plugin>
