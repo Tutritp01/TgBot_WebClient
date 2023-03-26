@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="~{starter :: head}"></th:block>
+
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+    <th:block th:insert="~{starter :: navigation}"></th:block>
+
+    <th:block th:insert="~{starter :: aside}"></th:block>
+
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="container-fluid">
+                <h1> <a href="/order">Create new order</a></h1>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <!--/*@thymesVar id="order" type="com.tutrit.bean.Order"*/-->
+                                    <tr th:each="order : ${orders}">
+                                        <td th:text="${order.orderId()}"></td>
+                                        <td th:text="${order.orderStatus()}"></td>
+                                        <td><a th:href="|/order/${order.orderId()}|"> Open </a> </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:insert="~{starter :: control-sidebar}"></th:block>
+    <th:block th:insert="~{starter :: footer}"></th:block>
+</div>
+<th:block th:insert="~{starter :: scripts}"></th:block>
+</body>
+</html>
