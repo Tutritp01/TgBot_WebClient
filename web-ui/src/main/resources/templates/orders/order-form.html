@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="~{starter :: head}"></th:block>
+
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+    <th:block th:insert="~{starter :: navigation}"></th:block>
+
+    <th:block th:insert="~{starter :: aside}"></th:block>
+
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-6">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Order</h3>
+                            </div>
+                            <!--/*@thymesVar id="order" type="com.tutrit.bean.Order"*/-->
+                            <form th:action="|/order/${order.orderId()}|" method="post">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="status">Status</label>
+                                        <input type="text" class="form-control" id="status" name="status" placeholder="Enter status" th:value="${order.orderStatus()}">
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <button name="save" type="submit" class="btn btn-primary btn-block">Save</button>
+                                        </div>
+                                        <div class="col-md-6">
+
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button name="delete" type="submit" class="btn btn-danger btn-block" th:disabled="${order.orderId() == null}">Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:insert="~{starter :: control-sidebar}"></th:block>
+    <th:block th:insert="~{starter :: footer}"></th:block>
+</div>
+<th:block th:insert="~{starter :: scripts}"></th:block>
+</body>
+</html>
