@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Engineer;
 import com.tutrit.config.ConfigProvider;
 import com.tutrit.gateway.EngineerGateway;
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -106,6 +105,6 @@ public class HttpEngineerGateway implements EngineerGateway {
 
     @Override
     public boolean deleteEngineerById(String engineerId){
-        throw new NotImplementedException("This method is not implemented");
+      return false;
     }
 }
