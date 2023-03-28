@@ -15,7 +15,7 @@ import java.net.http.HttpResponse;
 public class HomePageController {
     @GetMapping("/")
     public ModelAndView openHomePage() throws IOException, InterruptedException {
-        String url = "http://localhost:8081/actuator/info";
+        String url = "http://localhost:8081/info";
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
