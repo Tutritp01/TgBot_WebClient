@@ -2,7 +2,7 @@ package com.tutrit.webclient.service;
 
 import com.tutrit.config.HttpClientVersionConfig;
 import com.tutrit.config.WebCoreVersionConfig;
-import com.tutrit.interfaces.VersionInterface;
+import com.tutrit.interfaces.AbstractVersionConfig;
 import com.tutrit.webclient.config.WebUiVersionConfig;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class VersionInfoService {
-    private final List<VersionInterface> versions = new ArrayList<>();
+    private final List<AbstractVersionConfig> versions = new ArrayList<>();
 
     public VersionInfoService(final WebUiVersionConfig webUiVersionConfig,
                               final WebCoreVersionConfig webCoreVersionConfig,
