@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Order;
 import com.tutrit.config.ConfigProvider;
 import com.tutrit.gateway.OrderGateway;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -43,7 +42,8 @@ public class OrderGatewayHttp implements OrderGateway {
         try {
             final HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             String body = response.body();
-            List<Order> orderList = objectMapper.readValue(body, new TypeReference<List<Order>>() {});
+            List<Order> orderList = objectMapper.readValue(body, new TypeReference<List<Order>>() {
+            });
             return orderList;
 
         } catch (HttpTimeoutException e) {

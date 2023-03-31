@@ -1,4 +1,4 @@
-package com.tutrit.httpclient;
+package com.tutrit.sto.httpclient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,7 +60,7 @@ public class HttpUserGateway implements UserGateway {
         try {
             return objectMapper.readValue(response.body(), User.class);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Can't read mapJsonStringToUser", e);// TODO: 07.03.2023
+            throw new RuntimeException("Can't read mapJsonStringToUser", e);
         }
     }
 
@@ -69,7 +69,7 @@ public class HttpUserGateway implements UserGateway {
             return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException("Can't read getStringHttpResponse", e);// TODO: 07.03.2023
+            throw new RuntimeException("Can't read getStringHttpResponse", e);
         }
     }
 

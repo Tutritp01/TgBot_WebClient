@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.User;
 import com.tutrit.config.ConfigProvider;
 import com.tutrit.config.SpringContext;
+import com.tutrit.sto.httpclient.HttpUserGateway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

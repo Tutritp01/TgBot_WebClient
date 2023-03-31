@@ -1,4 +1,4 @@
-package com.tutrit.httpclient.gateway.CustomerGateway;
+package com.tutrit.sto.httpclient;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -1,9 +1,10 @@
-package com.tutrit.controller.gateway;
+package com.tutrit.httpclient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Car;
 import com.tutrit.config.ConfigProvider;
 import com.tutrit.config.SpringContext;
+import com.tutrit.sto.httpclient.CarGatewayHttp;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
