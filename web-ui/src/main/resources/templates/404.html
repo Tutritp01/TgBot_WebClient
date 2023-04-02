@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="~{starter :: head}"></th:block>
+
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+    <th:block th:insert="~{starter :: navigation}"></th:block>
+
+    <th:block th:insert="~{starter :: aside}"></th:block>
+
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="container-fluid">
+                <h1>404 - Not found </h1>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:insert="~{starter :: control-sidebar}"></th:block>
+    <th:block th:insert="~{starter :: footer}"></th:block>
+</div>
+<th:block th:insert="~{starter :: scripts}"></th:block>
+</body>
+</html>
