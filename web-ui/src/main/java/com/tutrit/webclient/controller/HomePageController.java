@@ -1,7 +1,6 @@
 package com.tutrit.webclient.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -15,7 +14,7 @@ import java.net.http.HttpResponse;
 public class HomePageController {
     @GetMapping("/")
     public ModelAndView openHomePage() throws IOException, InterruptedException {
-        String url = "http://localhost:8081/info";
+        String url = "http://localhost:8100/info";
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
