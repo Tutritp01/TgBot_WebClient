@@ -1,5 +1,6 @@
 package com.tutrit.webclient.config;
 
+import com.tutrit.interfaces.ModuleInfo;
 import com.tutrit.interfaces.Version;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Component;
 @PropertySource("classpath:http-client.properties")
 @PropertySource("classpath:web-ui.properties")
 @PropertySource("classpath:web-core.properties")
-
 public class VersionConfig implements Version {
     @Value("${web-core.app.name}")
     private String webCoreName;
@@ -60,5 +60,13 @@ public class VersionConfig implements Version {
     @Override
     public String getHttpClientVersion() {
         return httpClientVersion;
+    }
+
+    @Override
+    public ModuleInfo moduleInfo() {
+        var moi = new ModuleInfo();
+        moi.setDescription("User web interface");
+        moi.setModuleType("ui");
+        return moi;
     }
 }

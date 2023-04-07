@@ -14,8 +14,10 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpTimeoutException;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class OrderGatewayHttp implements OrderGateway {
@@ -53,7 +55,7 @@ public class OrderGatewayHttp implements OrderGateway {
             // TODO: 3/26/23 add pop up "Unknown error" and log exception
             e.printStackTrace();
         }
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

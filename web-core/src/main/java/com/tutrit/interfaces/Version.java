@@ -11,4 +11,8 @@ public interface Version {
     String getHttpClientName();
     String getHttpClientVersion();
 
+    default ModuleInfo moduleInfo() {
+        return new ModuleInfo();
+    }
+
 }
