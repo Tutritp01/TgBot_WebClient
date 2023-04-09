@@ -1,10 +1,10 @@
 package com.tutrit.webclient.config;
 
-import com.tutrit.interfaces.ModuleInfo;
-import com.tutrit.interfaces.Version;
+import com.tutrit.version.ModuleInfo;
+import com.tutrit.version.Version;
 import org.springframework.stereotype.Component;
 
-import static com.tutrit.interfaces.ModuleType.WEB_UI;
+import static com.tutrit.version.ModuleType.WEB_UI;
 
 @Component
 public class WebUiVersionConfig implements Version {

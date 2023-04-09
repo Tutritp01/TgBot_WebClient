@@ -1,10 +1,10 @@
 package com.tutrit.config;
 
-import com.tutrit.interfaces.ModuleInfo;
-import com.tutrit.interfaces.Version;
+import com.tutrit.version.ModuleInfo;
+import com.tutrit.version.Version;
 import org.springframework.stereotype.Component;
 
-import static com.tutrit.interfaces.ModuleType.WEB_CORE;
+import static com.tutrit.version.ModuleType.WEB_CORE;
 
 @Component
 public class WebCoreVersionConfig implements Version {

@@ -1,10 +1,10 @@
 package com.tutrit.distributive.config;
 
-import com.tutrit.interfaces.ModuleInfo;
-import com.tutrit.interfaces.Version;
+import com.tutrit.version.ModuleInfo;
+import com.tutrit.version.Version;
 import org.springframework.stereotype.Component;
 
-import static com.tutrit.interfaces.ModuleType.WEB_CLIENT_DISTRIBUTIVE;
+import static com.tutrit.version.ModuleType.WEB_CLIENT_DISTRIBUTIVE;
 
 @Component
 public class WebDistributiveVersionConfig implements Version {

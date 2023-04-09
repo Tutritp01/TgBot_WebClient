@@ -1,18 +1,18 @@
-package com.tutrit.distributive.version.controller;
+package com.tutrit.version;
 
-import com.tutrit.interfaces.ModuleInfo;
-import com.tutrit.interfaces.Version;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-public class VersionInfoController {
+
+public class VersionController {
 
     public final List<Version> versionList;
 
-    public VersionInfoController(final List<Version> versionList) {
+    public VersionController(final List<Version> versionList) {
         this.versionList = versionList;
     }
 

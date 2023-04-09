@@ -2,8 +2,8 @@ package com.tutrit.webclient.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tutrit.interfaces.ModuleInfo;
-import com.tutrit.interfaces.ModuleType;
+import com.tutrit.version.ModuleInfo;
+import com.tutrit.version.ModuleType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.tutrit.interfaces.ModuleType.*;
+import static com.tutrit.version.ModuleType.*;
 import static java.net.http.HttpClient.newHttpClient;
 
 @Controller

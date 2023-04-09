@@ -1,4 +1,4 @@
-package com.tutrit.interfaces;
+package com.tutrit.version;
 
 
 import lombok.Getter;
