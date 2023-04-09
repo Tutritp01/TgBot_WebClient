@@ -331,9 +331,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <aside th:fragment="control-sidebar" class="control-sidebar control-sidebar-dark">
         <!-- Control sidebar content goes here -->
         <div class="p-3">
-            <h5>Title</h5>
-            <h1>API Info:</h1>
-            <pre th:text="${infoResponse}"></pre>
+            <h5>Version:</h5>
+            <!--/*@thymesVar id="webUi" type="com.tutrit.interfaces.ModuleInfo"*/-->
+            <h4 th:if="${webUi != null}">Web interface Info:</h4>
+            <pre th:text="${webUi.getModuleType()}"></pre>
+            <pre th:text="${webUi.getVersion()}"></pre>
+            <pre th:text="${webUi.getDescription()}"></pre>
+            <!--/*@thymesVar id="webCore" type="com.tutrit.interfaces.ModuleInfo"*/-->
+            <h4 th:if="${webCore != null}">Core interface Info:</h4>
+            <pre th:text="${webCore.getModuleType()}"></pre>
+            <pre th:text="${webCore.getVersion()}"></pre>
+            <pre th:text="${webCore.getDescription()}"></pre>
+            <!--/*@thymesVar id="httpClient" type="com.tutrit.interfaces.ModuleInfo"*/-->
+            <h4 th:if="${httpClient != null}">Http interface Info:</h4>
+            <pre th:text="${httpClient.getModuleType()}"></pre>
+            <pre th:text="${httpClient.getVersion()}"></pre>
+            <pre th:text="${httpClient.getDescription()}"></pre>
+            <!--/*@thymesVar id="distributive" type="com.tutrit.interfaces.ModuleInfo"*/-->
+            <h4 th:if="${distributive != null}">Http interface Info:</h4>
+            <pre th:text="${distributive.getModuleType()}"></pre>
+            <pre th:text="${distributive.getVersion()}"></pre>
+            <pre th:text="${distributive.getDescription()}"></pre>
+
         </div>
     </aside>
     <!-- /.control-sidebar -->
