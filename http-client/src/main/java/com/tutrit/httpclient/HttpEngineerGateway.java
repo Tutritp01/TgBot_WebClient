@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Engineer;
 import com.tutrit.config.ConfigProvider;
+import com.tutrit.exception.NotImplementedException;
 import com.tutrit.gateway.EngineerGateway;
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
