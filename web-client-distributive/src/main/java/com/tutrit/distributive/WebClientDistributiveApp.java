@@ -1,4 +1,4 @@
-package com.tutrtit;
+package com.tutrit.distributive;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,4 +11,3 @@ public class WebClientDistributiveApp {
         SpringApplication.run(WebClientDistributiveApp.class, args);
     }
 }
-

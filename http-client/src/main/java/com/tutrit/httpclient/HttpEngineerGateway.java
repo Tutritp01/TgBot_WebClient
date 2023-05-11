@@ -106,6 +106,6 @@ public class HttpEngineerGateway implements EngineerGateway {
 
     @Override
     public boolean deleteEngineerById(String engineerId){
-        throw new NotImplementedException("This method is not implemented");
+        return false;
     }
 }
