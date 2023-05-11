@@ -13,6 +13,7 @@
 
     <dependencies>
         <dependency>
+            <!--https://github.com/Randgalt/record-builder-->
             <groupId>io.soabase.record-builder</groupId>
             <artifactId>record-builder-core</artifactId>
             <version>34</version>
