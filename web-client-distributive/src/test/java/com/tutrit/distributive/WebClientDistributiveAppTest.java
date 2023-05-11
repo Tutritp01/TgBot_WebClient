@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:web-client-distributive/src/test/java/com/tutrit/distributive/WebClientDistributiveAppTest.java
+package com.tutrit.distributive;
+========
 package com.tutrit;
+>>>>>>>> origin/main:web-client-distributive/src/test/java/com/tutrit/WebClientDistributiveAppTest.java
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.distributive.WebClientDistributiveApp;

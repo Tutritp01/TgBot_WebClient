@@ -2,7 +2,7 @@ spring:
   application:
     name:  web-client
   config:
-    import: optional:configserver:http://localhost:8888
+    import: optional:configserver:http://3.124.0.23:8888/
   profiles:
     active: dev
 server:
