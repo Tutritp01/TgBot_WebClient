@@ -332,26 +332,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Control sidebar content goes here -->
         <div class="p-3">
             <h5>Version:</h5>
-            <!--/*@thymesVar id="ui" type="com.tutrit.interfaces.ModuleInfo"*/-->
-            <h4 th:if="${ui != null}">Web interface Info:</h4>
-            <pre th:text="${ui.getGroup()}"></pre>
-            <pre th:text="${ui.getDescription()}"></pre>
-            <pre th:text="${ui.getVersion()}"></pre>
-            <pre th:text="${ui.getTime()}"></pre>
-            <hr />
-            <!--/*@thymesVar id="core" type="com.tutrit.interfaces.ModuleInfo"*/-->
-            <h4 th:if="${core != null}">Core service Info:</h4>
-            <pre th:text="${core.getGroup()}"></pre>
-            <pre th:text="${core.getDescription()}"></pre>
-            <pre th:text="${core.getVersion()}"></pre>
-            <pre th:text="${core.getTime()}"></pre>
-            <hr />
-            <!--/*@thymesVar id="gateway" type="com.tutrit.interfaces.ModuleInfo"*/-->
-            <h4 th:if="${gateway != null}">Gateway Info:</h4>
-            <pre th:text="${gateway.getGroup()}"></pre>
-            <pre th:text="${gateway.getDescription()}"></pre>
-            <pre th:text="${gateway.getVersion()}"></pre>
-            <pre th:text="${gateway.getTime()}"></pre>
+            <div th:if="${ui != null}">
+                <!--/*@thymesVar id="ui" type="com.tutrit.interfaces.ModuleInfo"*/-->
+                <h4 th:if="${ui != null}">Web interface Info:</h4>
+                <pre th:text="${ui.getGroup()}"></pre>
+                <pre th:text="${ui.getDescription()}"></pre>
+                <pre th:text="${ui.getVersion()}"></pre>
+                <pre th:text="${ui.getTime()}"></pre>
+                <hr />
+            </div>
+
+            <div th:if="${ui != null}">
+                <!--/*@thymesVar id="core" type="com.tutrit.interfaces.ModuleInfo"*/-->
+                <h4 th:if="${core != null}">Core service Info:</h4>
+                <pre th:text="${core.getGroup()}"></pre>
+                <pre th:text="${core.getDescription()}"></pre>
+                <pre th:text="${core.getVersion()}"></pre>
+                <pre th:text="${core.getTime()}"></pre>
+                <hr />
+            </div>
+
+            <div th:if="${ui != null}">
+                <!--/*@thymesVar id="gateway" type="com.tutrit.interfaces.ModuleInfo"*/-->
+                <h4 th:if="${gateway != null}">Gateway Info:</h4>
+                <pre th:text="${gateway.getGroup()}"></pre>
+                <pre th:text="${gateway.getDescription()}"></pre>
+                <pre th:text="${gateway.getVersion()}"></pre>
+                <pre th:text="${gateway.getTime()}"></pre>
+            </div>
+
         </div>
     </aside>
     <!-- /.control-sidebar -->

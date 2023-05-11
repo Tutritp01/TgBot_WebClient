@@ -10,7 +10,11 @@ public class VersionInfoController {
     @Autowired
     private VersionInfoService service;
 
-    @GetMapping("/info")
+    /**
+     * Endpoint disabled and need to be rethought, meanwhile use VersionController
+     * @return
+     */
+    //    @GetMapping("/info")
     public String getVersionInfo() {
         return service.getVersions();
     }
