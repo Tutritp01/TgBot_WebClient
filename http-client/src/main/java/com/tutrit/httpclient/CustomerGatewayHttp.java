@@ -1,4 +1,4 @@
-package com.tutrit.httpclient.gateway.CustomerGateway;
+package com.tutrit.httpclient;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,12 +15,12 @@ import java.net.http.HttpResponse;
 import java.util.Optional;
 
 @Component
-public class HttpCustomerGateway implements CustomerGateway {
+public class CustomerGatewayHttp implements CustomerGateway {
     private final ObjectMapper objectMapper;
     private final HttpClient httpClient;
     private final ConfigProvider config;
 
-    public HttpCustomerGateway(final ObjectMapper objectMapper,
+    public CustomerGatewayHttp(final ObjectMapper objectMapper,
                                final HttpClient httpClient,
                                final ConfigProvider config) {
         this.objectMapper = objectMapper;

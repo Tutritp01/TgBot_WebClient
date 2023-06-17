@@ -15,14 +15,14 @@ import java.net.http.HttpResponse;
 import java.util.Optional;
 
 @Component
-public class HttpUserGateway implements UserGateway {
+public class UserGatewayHttp implements UserGateway {
     private static final String CONTENT_TYPE = "application/json";
     private static final String PATH = "users";
     private final ObjectMapper objectMapper;
     private final ConfigProvider config;
     private final HttpClient httpClient;
 
-    public HttpUserGateway(
+    public UserGatewayHttp(
             final ConfigProvider config,
             final HttpClient httpClient,
             final ObjectMapper objectMapper

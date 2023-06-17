@@ -1,4 +1,4 @@
-package com.tutrit.httpclient.gateway.CustomerGateway;
+package com.tutrit.httpclient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Customer;
@@ -23,11 +23,11 @@ import static org.mockito.Mockito.when;
 
 
 @SpringBootTest(classes = SpringContext.SpringConfig.class)
-class HttpCustomerGatewayTest {
+class CustomerGatewayHttpTest {
     @Autowired
     ObjectMapper objectMapper;
     @Autowired
-    HttpCustomerGateway httpCustomerGateway;
+    CustomerGatewayHttp httpCustomerGateway;
     @MockBean
     ConfigProvider configProvider;
     @MockBean

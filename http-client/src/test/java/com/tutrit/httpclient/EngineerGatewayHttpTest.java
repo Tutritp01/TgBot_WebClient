@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = SpringContext.SpringConfig.class)
-class HttpEngineerGatewayTest {
+class EngineerGatewayHttpTest {
     private static final String URL_REST_API = "http://localhost:8080";
     private static final String PATH = "engineers";
     public static final Engineer ENGINEER = new Engineer("777", "Artemka", "Programmer", "developer", "first", "MaxCourses", 3, 8);
@@ -33,7 +33,7 @@ class HttpEngineerGatewayTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    HttpEngineerGateway httpEngineerGateway;
+    EngineerGatewayHttp httpEngineerGateway;
 
     @MockBean
     ConfigProvider config;

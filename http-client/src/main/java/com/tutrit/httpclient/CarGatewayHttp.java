@@ -1,4 +1,4 @@
-package com.tutrit.controller.gateway;
+package com.tutrit.httpclient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

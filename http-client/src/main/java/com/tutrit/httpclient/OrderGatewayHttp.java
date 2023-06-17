@@ -1,4 +1,4 @@
-package com.tutrit.sto.httpclient;
+package com.tutrit.httpclient;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

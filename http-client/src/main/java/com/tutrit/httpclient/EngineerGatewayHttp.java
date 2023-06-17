@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutrit.bean.Engineer;
 import com.tutrit.config.ConfigProvider;
-import com.tutrit.exception.NotImplementedException;
 import com.tutrit.gateway.EngineerGateway;
 import org.springframework.stereotype.Component;
 
@@ -16,14 +15,14 @@ import java.net.http.HttpResponse;
 import java.util.Optional;
 
 @Component
-public class HttpEngineerGateway implements EngineerGateway {
+public class EngineerGatewayHttp implements EngineerGateway {
     private static final String CONTENT_TYPE = "application/json";
     private static final String PATH = "engineers";
     private final ObjectMapper objectMapper;
     private final ConfigProvider config;
     private final HttpClient httpClient;
 
-    public HttpEngineerGateway(
+    public EngineerGatewayHttp(
             final ConfigProvider config,
             final HttpClient httpClient,
             final ObjectMapper objectMapper
