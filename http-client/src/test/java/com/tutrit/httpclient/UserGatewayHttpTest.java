@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = SpringContext.SpringConfig.class)
-class HttpUserGatewayTest {
+class UserGatewayHttpTest {
     private static final String URL_REST_API = "http://localhost:8080";
     private static final String PATH = "users";
     public static final User USER = new User("666", "AliceCooper", "+375291234");
@@ -33,7 +33,7 @@ class HttpUserGatewayTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    HttpUserGateway httpUserGateway;
+    UserGatewayHttp httpUserGateway;
 
     @MockBean
     ConfigProvider config;
